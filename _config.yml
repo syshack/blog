@@ -10,7 +10,7 @@ pygments: true
 # so be sure to set them if your theme uses them.
 #
 title : 祭奠青春
-tagline: Site Tagline
+tagline: 用文字祭奠易逝去的青春！
 author :
   name : syshack
   email : 3y3h4ck#m3.c0m
@@ -81,7 +81,7 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : jekyllbootstrap
+      short_name : syshack
     livefyre :
       site_id : 123
     intensedebate :
