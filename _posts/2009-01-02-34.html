@@ -1,0 +1,42 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - mysql
+  - Python
+  - 关于技术
+  - 函数
+  - 新特性
+  - 脚本
+title: "Python 3.0的新特性"
+type: post
+---
+呵呵，用了2.5学习很久了。3.0出来了，就安装了个体验一下。发现3.0和2.x有很多不同，我把我发现的给大家分享出来。欢迎大家交流。
+
+First：编码，默认使用UTF-8编码，中文支持变好了，高兴ing，
+
+Second：语法，1）去除了&lt;&gt;，全部改用!=。 
+<p style="text-align: left;">                                2）去除``，全部改用repr() </p>
+
+                                3）关键词加入as和with。 
+
+                                4）整型除法返回浮点数，要得到整型结果，请使用//。 
+
+                                5）加入nonlocal语句。使用noclocal x可以直接指派外围（非全局）变量。 
+
+                                6）去除print语句，加入print()函数实现相同的功能。同样的还有exec语句，已经改为exec()函数。
+
+                                7）去除元组参数解包。不能def(a, (b, c)):pass这样定义函数了。 
+
+                                8）新式的8进制字面量，相应地修改了oct()函数。 
+
+                                9）增加了2进制字面量和bin()函数： 
+<p style="text-align: left;">                               10）扩展的可迭代解包。在Py3.0里，a, b, *rest = seq 和   *rest, a = seq都是合法的。只要求两点：rest                                是list对象和seq是可迭代的。 </p>
+
+                              11）新的super()，可以不再给super()传参数。

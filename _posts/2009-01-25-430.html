@@ -1,0 +1,18 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - apache
+  - lamp
+  - mysql
+  - php
+  - 关于技术
+title: LAMP搭建之mysql篇
+type: post
+---
+<p>LAMP，顾名思义 linux+apache+mysql+php，是现在网络上最流行的网页应用架构。</p>  <p>在以数据为中心的今天，这个构架中最受人关注的就是数据系统（mysql），所以mysql的安装和配置是至关重要的。一个mysql我装了不下100遍，今天我就给大家分享下我多次安装配置失败后的总结的经验哈。</p>  <p><strong>安装篇</strong></p>  <p>一般有下边几种安装方式</p>  <ol>   <li>RPM安装</li>    <li>二进制包安装</li>    <li>源码编译安装</li> </ol> <!--more-->  <p>&#160;</p>  <p>先讲RPM包安装，过程如下</p>  <p>下载mysql的rpm包，然后rpm -ivh搞定，这是最初级的</p>  <p>更高级点，给安装指定路径 使用 –prefix =【路径】</p>  <p>下来讲二进制包安装</p>  <p>shell&gt; <b>groupadd mysql</b></p>  <p>shell&gt; <b>useradd -g mysql mysql</b></p>  <p>shell&gt; <b>cd /usr/local</b></p>  <p>shell&gt; <b>gunzip &lt; <i>/path/to/mysql-VERSION-OS</i>.tar.gz | tar xvf -</b></p>  <p>shell&gt; <b>ln -s <i>full-path-to-mysql-VERSION-OS</i> mysql</b></p>  <p>shell&gt; <b>cd mysql&#160;&#160; /*这步很重要，不然边的命令就执行不成功</b></p>  <p>shell&gt; <b>scripts/mysql_install_db --user=mysql</b></p>  <p>shell&gt; <b>chown -R root&#160; .</b></p>  <p>shell&gt; <b>chown -R mysql data</b></p>  <p>shell&gt; <b>chgrp -R mysql .</b></p>  <p>shell&gt; <b>bin/mysqld_safe --user=mysql &amp;</b></p>  <p>如果要让mysql开机启动</p>  <p>在/etc/rc.local加上一条</p>  <p>你的mysql文件夹路径/bin/mysqld_safe --user=mysql &amp;</p>  <p>这还没完，细心的你肯定已经知道了，这里root帐户还没有密码。请看安装后的配置</p>  <p>给root设置密码</p>  <p>[root@ mysql]# 你mysql的路径/bin/mysqladmin -u root password 'xsean'</p>  <p>使用root帐户登陆数据库管理</p>  <p>[root@ mysql]# 你mysql的路径/bin/mysql -u root –p</p>  <p>最后讲源码安装，这是最推荐的</p>  <p>shell&gt; groupadd mysql   <br />shell&gt; useradd -g mysql mysql    <br />shell&gt; gunzip&#160; cd mysql-VERSION    <br />shell&gt; ./configure --prefix=/usr/local/mysql     <br />--datadir=/usr/local/mysql/data     <br />--with-charset=gbk     <br />--localstatedir=/usr/local/mysql/data     <br />--with-unix-socket-path=/usr/local/mysql/tmp/mysql.sock    <br />shell&gt; make    <br />shell&gt; make install    <br />#cd /usr/local/mysql    <br />#bin/mysql_install_db --user=mysql </p>  <p>#chown -R root .   <br />#chown -R mysql data    <br />#chgrp -R mysql .    <br />#bin/mysqld_safe --user=mysql &amp;    <br />MySQL安装后步骤    <br />[root@ mysql]# /usr/local/mysql/bin/mysqladmin -u root password 'xsean'    <br />[root@ mysql]# cd bin    <br />[root@ bin]# ./mysql -u root –p     <br />如果要让mysql开机启动 </p>  <p>在/etc/rc.local加上一条 </p>  <p>你的mysql文件夹路径/bin/mysqld_safe --user=mysql &amp;</p>  <p>需要注意的是目录权限问题！很多问题就是权限造成的！有问题就把权限好好检查下。</p>  <p>再有什么问题可以留言问我哈！</p>

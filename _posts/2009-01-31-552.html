@@ -1,0 +1,45 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - mysql
+  - wordpress
+  - 关于技术
+  - 数据
+title: Mysql命令行下实现数据的导入
+type: post
+---
+<img class="alignleft size-full wp-image-562" title="mysql" src="http://www.syshacker.com/wp-content/uploads/2009/01/mysql.gif" alt="mysql" width="100" height="53" />
+
+昨天有个哥们博客搬家，数据库死活搞不上去，用mysql-front连上去也不行。
+
+就向我求助了，我就帮他搞，一会就搞定。现在我就把我的数据导入过程给大家分享下。
+
+本来我机器上装了mysql，所以我就直接用命令行上。
+
+首先，连上数据库
+
+&gt;mysql  -h  mysql服务器ip地址 –u 用户名 –p 数据库名
+
+&gt;输入密码
+
+接下来就是创建库了，很重要的，开始我就是忽略了这一步，才一直导入一直失败！因为你要搬迁到新的mysql服务器，就没有对应你的数据库，所以建个
+
+mysql &gt;create database  你的数据库名；   记住mysql下每个语句后边要加“；”再回车执行
+
+然后使用“use”命令切换到你建的数据库
+
+mysql&gt;use  你的数据库名；
+
+然后导入你备份的数据库，就是.sql文件，利用”source”命令导入
+
+mysql &gt;source 你的.sql文件地址；
+
+导入完就ok了！
+
+简单吧！呵呵

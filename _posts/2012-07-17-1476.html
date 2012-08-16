@@ -1,0 +1,26 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - Python
+  - 关于技术
+title: python字符串转字典的方法
+type: post
+---
+原始数据：line=”playerId:68719477698,time:1339689601168,module:78,type:2,cost:3,nowGold:0,nowGift:88”
+
+目的：取得playerId，time等的值。
+
+思路：把这个字符串转化为字典
+
+实现代码：
+<pre escaped="true">list=line.split(‘,')
+d={}
+for i in list:
+     d[i.split(':')[0]]=i.split(':')[1]</pre>
+然后取值就很方便了。

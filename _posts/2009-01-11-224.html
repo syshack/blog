@@ -1,0 +1,54 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 关于技术
+  - 函数
+title: 让WordPress注册时不发邮件，直接显示密码
+type: post
+---
+原文来自<a href="http://www.v2op.com/blog/2008/08 ... %e5%af%86%e7%a0%81/" target="_blank">http://www.v2op.com/blog/2008/08 ... %e5%af%86%e7%a0%81/</a>
+
+注册前
+
+<img src="http://www.syshacker.com/wp-content/uploads/2009/01/e290_3185801733_cfaab1f92d.jpg" border="0" alt="截图1231617775" width="339" height="373" />
+<!--more-->
+
+注册后
+
+<img src="http://www.syshacker.com/wp-content/uploads/2009/01/6232_3185801577_a5c5662edf.jpg" border="0" alt="截图1231617881" width="338" height="389" />
+WordPress的用户注册机制是，填写用户名、邮箱，由WordPress生成随机密码，并发送到用户注册时填写的邮箱地址。但很多人的服务器并没有配置邮件服务（比如我正在用的这台服务器），或者由于邮件运行商的反垃圾邮件功能等原因，导致注册之后收不到WordPress发送的密码邮件，无法完成注册。
+很不方便…
+既然如此，不如我们hacks一下wordpress。让WordPress注册时不发邮件，直接显示密码得了。
+怎么改呢？很简单，只需改动WordPress根目录下的 wp-login.php 即可。
+2.7正式版下测试无错。
+
+1、搜索下面这句，位于 register_new_user 函数中。用于注册成功后发送通知。找到后把它注释掉（注释方法：在代码的前面加 "/*" 代码的后面加 "*/" 不包含引号）。
+<code>wp_new_user_notification($user_id, $user_pass);</code>
+2、并在上面这句的下一行加上两句：
+<code>setcookie("u", $user_login);
+
+setcookie("user_pass", $user_pass);
+</code>
+目的是把注册时填写的用户名，以及wordpress随机生成的密码写入cookies，以便在后面调用。
+
+3、搜索下面这句
+<code>$errors->add('registered', __('Registration complete. Please check your e-mail.'), 'message');</code>
+并把它替换为
+<code>$errors->add('registered', __('注册成功！用户名：'.$_COOKIE["u"].' 密码：'.$_COOKIE["user_pass"].'（登录后自行修改成您便于记忆的密码）'), 'message');</code>
+到此，就修改完成了。保存，上传。
+
+还有一处建议修改（请看演示图片显示的文字）
+<code><?php _e('A password will be e-mailed to you.') ?></code>
+替换里面的文字，以防用户注册完毕后关闭注册页而收不到密码。
+
+我替换的文字为
+<code><?php _e('注册完毕后，密码会自动生成在本页。') ?></code>
+复制代码当然大家可以自定义自己的内容，如果出现乱码，请将文件转码为UTF-8。

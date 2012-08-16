@@ -1,0 +1,181 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+  - 函数
+title: WordPress优秀主题制作
+type: post
+---
+本文由<a href="http://hellobmw.com/">北极冰仔</a>翻译自 <a href="http://www.webdesignerwall.com/">Nick La</a> 原文 <a href="http://www.webdesignerwall.com/tutorials/wordpress-theme-hacks/">WordPress Theme Hack</a>。
+转载请务必以<strong>超级链接</strong>的形式注明<strong>本文</strong>及<strong>原文</strong>出处。如您对此存有异议，请勿转载。
+本文地址：<a href="http://hellobmw.com/archives/wordpress-theme-hacks.html">http://hellobmw.com/archives/wordpress-theme-hacks.html</a><a href="http://hellobmw.com/">WordPress</a> 最初的开发目标只是一个博客平台。但是现在 WordPress 已经日渐强大，你可以使用它来建立任何类型的网站或把它当作一套内容管理系统（CMS）。写这篇文章，我将与大家分享一些关于如何制作更优秀的 WordPress 主题的技巧。我不是程序员或是开发人员，所以我将重点放在前台的开发上。呃，对了，我忘记说了，WordPress 让这类开发变得如此简单，即使是非程序员（像我一样的设计师）也能建立出非常棒的网站来。我的 WordPress 站点包括：<a href="http://www.ndesign-studio.com/">N.Design Studio</a>、<a href="http://bestwebgallery.com/">Best Web Gallery</a>、<a href="http://www.webdesignerwall.com/">Web Designer Wall</a> 和一些免费的 <a href="http://www.ndesign-studio.com/resources/wp-themes/">WordPress 主题</a>。<!--more-->
+<h3>WordPress 条件标签</h3>
+在创建一款动态的 WordPress 主题过程中，<a href="http://codex.wordpress.org/Conditional_Tags">条件标签</a>非常有用。它允许你控制哪些内容将会显示，以怎么样的方式显示。下面是一些条件标签的示例：
+<div class="php">&lt;ul id=<span style="color: #ff0000;">"nav"</span>&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_home<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_category<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_archive<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_search<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_single<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_date<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;Gallery&lt;/a&gt;&lt;/li&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_page<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'about'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;About&lt;/a&gt;&lt;/li&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_page<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'submit'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;Submit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</div>
+<h6>动态高亮菜单</h6>
+我在 <a href="http://bestwebgallery.com/">Best Web Gallery</a> 中使用了动态高亮菜单。假如当前页面是首页（Home）或目录页（Category）或存档页（Archive）或搜索结果页（Search）或单篇日志页面（Single），class="current" 属性将会自动加入到第一个列表条目的 li 标签中，它将会高亮显示“Callery”按钮；假如当前页面的缩略名是“about”时，class="current" 属性将自动加入第二个列表条目的 li 标签中。
+<div class="php">&lt;ul id=<span style="color: #ff0000;">"nav"</span>&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_home<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_category<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_archive<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_search<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_single<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_date<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;Gallery&lt;/a&gt;&lt;/li&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_page<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'about'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;About&lt;/a&gt;&lt;/li&gt;
+  &lt;li&lt;?php <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> is_page<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'submit'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="color: #ff0000;">' class="current"'</span>; <span style="font-weight: bold; color: #006600;">}</span> ?&gt;&gt;&lt;a href=<span style="color: #ff0000;">"#"</span>&gt;Submit&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</div>
+<h4>动态 title 标签</h4>
+又一个例子，我将使用条件标签在 header.php 中输出动态的 title 标签。
+<div class="syntax_hilite">
+<div id="php-2">
+<div class="php">&lt;title&gt;
+<span style="font-weight: bold; color: #000000;">&lt;?php</span>
+<span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span>is_home<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> bloginfo<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'name'</span><span style="font-weight: bold; color: #006600;">)</span>;
+<span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">elseif</span> <span style="font-weight: bold; color: #006600;">(</span>is_404<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> <span style="color: #ff0000;">'404 Not Found'</span>;
+<span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">elseif</span> <span style="font-weight: bold; color: #006600;">(</span>is_category<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> <span style="color: #ff0000;">'Category:'</span>; wp_title<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">''</span><span style="font-weight: bold; color: #006600;">)</span>;
+<span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">elseif</span> <span style="font-weight: bold; color: #006600;">(</span>is_search<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> <span style="color: #ff0000;">'Search Results'</span>;
+<span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">elseif</span> <span style="font-weight: bold; color: #006600;">(</span> is_day<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_month<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> || is_year<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> <span style="color: #ff0000;">'Archives:'</span>; wp_title<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">''</span><span style="font-weight: bold; color: #006600;">)</span>;
+<span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">else</span> <span style="font-weight: bold; color: #006600;">{</span>
+    <span style="color: #000066;">echo</span> wp_title<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">''</span><span style="font-weight: bold; color: #006600;">)</span>;
+<span style="font-weight: bold; color: #006600;">}</span>
+<span style="font-weight: bold; color: #000000;">?&gt;</span>
+&lt;/title&gt;</div>
+</div>
+</div>
+<h6>动态内容</h6>
+如果你想包含一个只在首页上显示的文件，使用下面的代码：
+<div class="php"><span style="FONT-WEIGHT: bold; COLOR: #000000">&lt;?php</span> <span style="COLOR: #616100">if</span> <span style="FONT-WEIGHT: bold; COLOR: #006600">(</span> is_home<span style="FONT-WEIGHT: bold; COLOR: #006600">(</span><span style="FONT-WEIGHT: bold; COLOR: #006600">)</span> <span style="FONT-WEIGHT: bold; COLOR: #006600">)</span> <span style="FONT-WEIGHT: bold; COLOR: #006600">{</span> <span style="COLOR: #616100">include</span> <span style="FONT-WEIGHT: bold; COLOR: #006600">(</span><span style="COLOR: #ff0000">'file.php'</span><span style="FONT-WEIGHT: bold; COLOR: #006600">)</span>; <span style="FONT-WEIGHT: bold; COLOR: #006600">}</span> <span style="FONT-WEIGHT: bold; COLOR: #000000">?&gt;</span></div>
+<!--p if ( is_home() ) { include ('file.php'); }-->
+<h6>高亮特定的日志</h6>
+假设 ID 为 2 的目录是你的特别目录，你想添加一个 CSS 类使得该目录下的所有日志均高亮显示，那么你可以在 WordPress 的循环中使用下面的代码片段：
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> in_category<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'2'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #000066;">echo</span> <span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'class="feature"'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #006600;">}</span> <span style="font-weight: bold; color: #000000;">?&gt;</span></div>
+<!--p if ( in_category('2') ) { echo ('class="feature"'); }-->
+<h6>唯一的单篇日志模板</h6>
+假设你想使用不同的单篇日志模板（single.php）显示不同目录下的文章，你可以使用 in_category 函数来判断某篇日志处于哪个目录，然后调用不同的单篇日志模板。在默认的 single.php 文件中，敲入下面的代码，目录 1 的文章将使用 single1.php 模板，目录 2 的文章将使用 single2.php，其它文章将使用 single_other 模板：
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span>
+  <span style="color: #0000ff;">$post</span> = <span style="color: #0000ff;">$wp_query</span>-&gt;<span style="color: #006600;">post</span>; </div>
+  <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span> in_category<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'1'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+  <span style="color: #616100;">include</span><span style="font-weight: bold; color: #006600;">(</span>TEMPLATEPATH . <span style="color: #ff0000;">'/single1.php'</span><span style="font-weight: bold; color: #006600;">)</span>;
+
+  <span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">elseif</span> <span style="font-weight: bold; color: #006600;">(</span> in_category<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'2'</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span>
+  <span style="color: #616100;">include</span><span style="font-weight: bold; color: #006600;">(</span>TEMPLATEPATH . <span style="color: #ff0000;">'/single2.php'</span><span style="font-weight: bold; color: #006600;">)</span>;
+
+  <span style="font-weight: bold; color: #006600;">}</span> <span style="color: #616100;">else</span> <span style="font-weight: bold; color: #006600;">{</span>
+  <span style="color: #616100;">include</span><span style="font-weight: bold; color: #006600;">(</span>TEMPLATEPATH . <span style="color: #ff0000;">'/single_other.php'</span><span style="font-weight: bold; color: #006600;">)</span>;
+
+  <span style="font-weight: bold; color: #006600;">}</span>
+<span style="font-weight: bold; color: #000000;">?&gt;</span>
+<h5>唯一的目录模板</h5>
+假设你想为不同的目录使用不同的模板，你只需要简单地将模板保存为以 category-2.php 这种形式命名的文件，category-2.php 用来显示 ID 为 2 的目录，category-3.php 用来显示 ID 为 3 的目录，依次类推。
+<h5>在第一篇日志后显示 Google 广告</h5>
+很多人向我询问如何实现在第一篇日志后显示 Google 广告，很简单，你需要在循环中使用一个变量 $loopcounter，当 $loopcounter 小于等于 1 时，添加 Google 广告代码文件
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span>have_posts<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> : <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">while</span> <span style="font-weight: bold; color: #006600;">(</span>have_posts<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> : the_post<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="color: #0000ff;">$loopcounter</span>++; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+  <span style="color: #ff9933; font-style: italic;">// the loop stuffs</span>
+
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span><span style="color: #0000ff;">$loopcounter</span> &lt;= <span style="color: #cc66cc;">1</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="color: #616100;">include</span> <span style="font-weight: bold; color: #006600;">(</span>TEMPLATEPATH . <span style="color: #ff0000;">'/ad.php'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #006600;">}</span> <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">endwhile</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">else</span> : <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">endif</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+你可以在循环中使用 <a href="http://codex.wordpress.org/Template_Tags/query_posts">query_posts</a> 来控制日志的调用，它允许你控制日志显示的内容、显示的位置、显示的方式。你可以调用或排除特定的目录，你有完全的权力来决定。下面我将演示如何使用 query_posts 显示最新日志列表、特定日志或排除特定的目录：
+<h6>显示最新日志列表</h6>
+下面的代码将显示最新的 5 篇日志
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> query_posts<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'showposts=5'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+&lt;ul&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">while</span> <span style="font-weight: bold; color: #006600;">(</span>have_posts<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> : the_post<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+  &lt;li&gt;&lt;a href=<span style="color: #ff0000;">"&lt;?php the_permalink() ?&gt;"</span>&gt;&lt;?php the_title<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; ?&gt;&lt;/a&gt;&lt;/li&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">endwhile</span>;?&gt;
+&lt;/ul&gt;
+
+显示特定日志
+
+假设 ID 为 2 的目录是你的特别目录，你想在侧边栏中显示该目录下的 5 篇最新日志，那么把下面的代码写进
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> query_posts<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'cat=2&amp;showposts=5'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+&lt;ul&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">while</span> <span style="font-weight: bold; color: #006600;">(</span>have_posts<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> : the_post<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+  &lt;li&gt;&lt;a href=<span style="color: #ff0000;">"&lt;?php the_permalink() ?&gt;"</span>&gt;&lt;?php the_title<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; ?&gt;&lt;/a&gt;&lt;/li&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">endwhile</span>;?&gt;
+&lt;/ul&gt;
+
+排除特定的目录
+
+你可以使用 query_posts 来排除显示特定目录的日志，下面的代码将排除 ID 为 2 的目录，请注意 ID 前面的负号
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> query_posts<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'cat=-2'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">while</span> <span style="font-weight: bold; color: #006600;">(</span>have_posts<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span><span style="font-weight: bold; color: #006600;">)</span> : the_post<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+  <span style="color: #ff9933; font-style: italic;">//the loop here</span>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #616100;">endwhile</span>;?&gt;
+
+<em>小技巧：</em>你还可以使用 posts_per_page 参数指定每页显示的日志数
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> query_posts<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'posts_per_page=6'</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span></div>
+自定义字段
+
+自定义字段 <a href="http://codex.wordpress.org/Using_Custom_Fields">Custom_Fields</a> 是 WordPress 最强大的功能之一，它允许你为日志的内容或摘要附加额外的数据或文本。有了自定义字段，你可以自由地把 WordPress 变成一个 CMS 系统。在 <a href="http://www.webdesignerwall.com/">Web Designer Wall</a>，我使用自定义字段为每篇日志显示一张图片并链接至它。<img src="http://www.syshacker.com/wp-content/uploads/2009/01/d179_custom-fields.gif" alt="custom fields" />再使用下面的代码调用图片并添加链接
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #ff9933; font-style: italic;">//get article_image (custom field) ?&gt;</span>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #0000ff;">$image</span> = get_post_meta<span style="font-weight: bold; color: #006600;">(</span><span style="color: #0000ff;">$post</span>-&gt;<span style="color: #006600;">ID</span>, <span style="color: #ff0000;">'article_image'</span>, <span style="font-weight: bold; color: #000000;">true</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+&lt;a href=<span style="color: #ff0000;">"&lt;?php the_permalink() ?&gt;"</span>&gt;&lt;img src=<span style="color: #ff0000;">"&lt;?php echo $image; ?&gt;"</span> alt=<span style="color: #ff0000;">"&lt;?php the_title(); ?&gt;"</span> /&gt;&lt;/a&gt;
+
+<em>小技巧：</em>别忘了 WordPress 允许你为每篇日志添加多个自定义字段。我在 <a href="http://bestwebgallery.com/">Best Web Gallery</a> 中使用了多个自定义字段调用站点缩略图，图片提示和链接地址。
+<h5>WP List Pages</h5>
+模板标签 <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages">wp_list_pages</a> 通常用来显示导航页面列表，下面我告诉你如何使用它来显示站点地图和子菜单。
+<h6>站点地图</h6>
+为你的所有页面生成一个站点地图（<a href="http://www.ndesign-studio.com/sitemap/">示例</a>），把下面的代码放进你的页面模板中（page.php），我排除了 ID 为 12 的页面，因为它就是站点地图页面本身，我不想把它也显示出来动态的子页面菜单
+<div class="php">&lt;ul&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> wp_list_pages<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'exclude=12&amp;title_li='</span> <span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+&lt;/ul&gt;</div>
+<strong>动态的子页面菜单</strong>
+
+把下面的代码放进 sidebar.php，它将显示当前页面的子页面，如果有的话：
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span>
+<span style="color: #0000ff;">$children</span> = wp_list_pages<span style="font-weight: bold; color: #006600;">(</span><span style="color: #ff0000;">'title_li=&amp;child_of='</span>.<span style="color: #0000ff;">$post</span>-&gt;<span style="color: #006600;">ID</span>.<span style="color: #ff0000;">'&amp;echo=0'</span><span style="font-weight: bold; color: #006600;">)</span>;
+<span style="color: #616100;">if</span> <span style="font-weight: bold; color: #006600;">(</span><span style="color: #0000ff;">$children</span><span style="font-weight: bold; color: #006600;">)</span> <span style="font-weight: bold; color: #006600;">{</span> <span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+&lt;ul&gt;
+  <span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="color: #000066;">echo</span> <span style="color: #0000ff;">$children</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+&lt;/ul&gt;
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> <span style="font-weight: bold; color: #006600;">}</span> <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+<strong>页面模板</strong>
+
+如果你想用 WordPress 建立一个网页管理系统，你一定不能放过<a href="http://codex.wordpress.org/Pages#Creating_your_own_Page_Templates">页面模板</a>这个功能。它允许你自定义页面的显示方式。要使用页面模板，首先你得创建一个页面模板，然后给页面指定这个模板：
+下面是页面模板的结构：
+<div class="php"><span style="font-weight: bold; color: #000000;">&lt;?php</span>
+<span style="color: #008000;">/*
+Template Name: Portfolio
+*/</span>
+<span style="font-weight: bold; color: #000000;">?&gt;</span> </div>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> get_header<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+  <span style="color: #ff9933; font-style: italic;">//the loop here</span>
+<span style="font-weight: bold; color: #000000;">&lt;?php</span> get_footer<span style="font-weight: bold; color: #006600;">(</span><span style="font-weight: bold; color: #006600;">)</span>; <span style="font-weight: bold; color: #000000;">?&gt;</span>
+
+当你编辑一个页面时，可以为它指定可用的模板：
+<img src="http://www.syshacker.com/wp-content/uploads/2009/01/f228_page-template.gif" alt="Page Template" />
+<h5>WordPress 选项</h5>
+还有一些 WordPress 内建的选项可以让你的站点看上去更好，它们是：
+<h6>自定义首页</h6>
+默认情况下，WordPress 将会在你的首页上显示日志，但是你可以设置为一个静态页面或是欢迎页面，在 Admin -&gt; Options -&gt; Reading 中设置该选项：
+<img src="http://www.syshacker.com/wp-content/uploads/2009/01/885f_frontpage-setting.gif" alt="FrontPage Option" />
+<h6>永久链接</h6>
+默认地，WordPress 日志的地址是类似于 www.yoursite.com/?p=123 的形式，它既不是 URL 又对搜索引擎不友好，你可以在 Admin -&gt; Options -&gt; Permalinks 中设置 <a href="http://codex.wordpress.org/Using_Permalinks#Structure_Tags">Permalink 永久链接</a>的形式。
+<h6>目录前缀</h6>
+WordPress 目录的默认前缀是 category，当你按照下图在 Options -&gt; Permalinks 中输入 article 后，目录的前缀将变为 article。
+<img src="http://www.syshacker.com/wp-content/uploads/2009/01/16c8_category-base.gif" alt="Category Base" />
+目录的 URL 也将从 yoursite.com/category/cat-name/ 变为 yoursite.com/article/cat-name/
+<h5>想继续读？</h5>
+<a href="http://codex.wordpress.org/">WordPress Codex</a> 是学习 WordPress 的最佳去处，感谢 WordPress！（译者按：感谢 <a href="http://www.webdesignerwall.com/">Nick La</a>！）

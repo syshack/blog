@@ -1,0 +1,32 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - sendmail
+  - 关于技术
+title: sendmail更新版本后报错（附解决方法）
+type: post
+---
+早上更新服务器，把sendmail版本更新了，重启之后发不出邮件，报一大堆错～
+报错信息如下：
+<pre class="brush:php">
+Nov 17 13:24:56 vps sendmail[3228]: dangerous permissions=40755 on queue directory /var/spool/clientmqueue/
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: SYSERR(daemon): collect: Cannot write ./dfoAH5OuxM003228 (bfcommit, uid=2, gid=51): Permission denied
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: from=daemon, size=181, class=0, nrcpts=2, relay=daemon@localhost
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: 0: fl=0x0, mode=10600: FIFO: dev=0/6, ino=1068637972, nlink=1, u/gid=2/2, size=0
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: 1: fl=0x1, mode=20666: CHR: dev=0/46, ino=4644304, nlink=1, u/gid=0/0, size=0
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: 2: fl=0x8401, mode=100644: dev=0/41, ino=142052801, nlink=1, u/gid=0/0, size=2493370
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: 3: fl=0x2, mode=140777: SOCK localhost-&amp;amp;amp;gt;[[UNIX: /dev/log]]
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: 4: fl=0x1, mode=20666: CHR: dev=0/46, ino=4644304, nlink=1, u/gid=0/0, size=0
+Nov 17 13:24:57 vps sendmail[3228]: oAH5OuxM003228: SYSERR(daemon): queueup: cannot create queue file ./qfoAH5OuxM003228, euid=2, fd=-1, fp=0x0: Permission denied</pre>
+
+比较晕乎，那个文件的权限我从来没修改过的，怎么会错误呢，既然说错了，就改呗，改成770就ok了
+<pre class="brush:php">
+chmod 770 /var/spool//clientmqueue</pre>
+再发信，就成功了。不知道后边的Permission denied错误咋回事，反正我改了那个权限就好了，当然他是浮云吧～希望能帮到遇到同样问题的同学。

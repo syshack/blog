@@ -1,0 +1,91 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+  - 函数
+  - 技术
+title: WordPress主题制作
+type: post
+---
+<h5>呵呵，装了wordpress之后，一直找不到合适的主题。就发扬毛爷爷的自己动手丰衣足食精神，学习做主题，下边就是我找到的资料，大家共享。</h5>
+<h5>基本条件判断Tag</h5>
+<ul>
+	<li>is_home(): 是否为主页</li>
+	<li>is_page() : 是否为内容页(Post)</li>
+	<li>is_page() : 是否为内容页(Page)</li>
+	<li>is_category(): 是否为Category/Archive页</li>
+	<li>is_tag(): 是否为Tag存档页</li>
+	<li>is_date() : 是否为指定日期存档页</li>
+	<li>is_year(): 是否为指定年份存档页</li>
+	<li>is_month(): 是否为指定月份存档页</li>
+	<li>s_day(): 是否为指定日存档页</li>
+	<li>is_time() : 是否为指定时间存档页</li>
+	<li>is_archive() : 是否为存档页</li>
+	<li>is_search() : 是否为搜索结果页</li>
+	<li>is_404(): 是否为 “HTTP 404: Not Found” 错误页</li>
+	<li>is_paged() : 主页/Category/Archive页是否以多页显示</li>
+</ul>
+<h5>Header部分常用到的PHP函数</h5>
+<ul>
+	<li><strong>&lt;?php bloginfo(’name’); ?&gt;</strong> : 博客名称(Title)</li>
+	<li><strong>&lt;?php bloginfo(’stylesheet_url’); ?&gt;</strong> : CSS文件路径</li>
+	<li><strong>&lt;?php bloginfo(’pingback_url’); ?&gt;</strong> : PingBack Url</li>
+	<li><strong>&lt;?php bloginfo(’template_url’); ?&gt;</strong> : 模板文件路径</li>
+	<li><strong>&lt;?php bloginfo(’version’); ?&gt;</strong> : <a href="http://www.jiucool.com/tag/wordpress/">WordPress</a>版本</li>
+	<li><strong>&lt;?php bloginfo(’atom_url’); ?&gt;</strong> : Atom Url</li>
+	<li><strong>&lt;?php bloginfo(’rss2_url’); ?&gt;</strong> : RSS 2.o Url</li>
+	<li><strong>&lt;?php bloginfo(’url’); ?&gt;</strong> : 博客 Url</li>
+	<li><strong>&lt;?php bloginfo(’html_type’); ?&gt;</strong> : 博客网页Html类型</li>
+	<li><strong>&lt;?php bloginfo(’charset’); ?&gt;</strong> : 博客网页编码</li>
+	<li><strong>&lt;?php bloginfo(’description’); ?&gt;</strong> : 博客描述</li>
+	<li><strong>&lt;?php wp_title(); ?&gt;</strong> : 特定内容页(Post/Page)的标题</li>
+</ul>
+<h5>模板常用的PHP函数及命令</h5>
+<ul>
+	<li><strong>&lt;?php get_header(); ?&gt;</strong> : 调用Header模板</li>
+	<li><strong>&lt;?php get_sidebar(); ?&gt;</strong> : 调用Sidebar模板</li>
+	<li><strong>&lt;?php get_footer(); ?&gt;</strong> : 调用Footer模板</li>
+	<li><strong>&lt;?php the_content(); ?&gt;</strong> : 显示内容(Post/Page)</li>
+	<li><strong>&lt;?php if(have_posts()) : ?&gt;</strong> : 检查是否存在Post/Page</li>
+	<li><strong>&lt;?php while(have_posts()) : the_post(); ?&gt;</strong> : 如果存在Post/Page则予以显示</li>
+	<li><strong>&lt;?php endwhile; ?&gt;</strong> : While 结束</li>
+	<li><strong>&lt;?php endif; ?&gt;</strong> : If 结束</li>
+	<li><strong>&lt;?php the_time(’字符串’) ?&gt;</strong> : 显示时间，时间格式由“字符串”参数决定，具体参考<a href="http://php.net/date">PHP手册</a></li>
+	<li><strong>&lt;?php comments_popup_link(); ?&gt;</strong> : 正文中的留言链接。如果使用 comments_popup_script() ，则留言会在新窗口中打开，反之，则在当前窗口打开</li>
+	<li><strong>&lt;?php the_title(); ?&gt;</strong> : 内容页(Post/Page)标题</li>
+	<li><strong>&lt;?php the_permalink() ?&gt;</strong> : 内容页(Post/Page) Url</li>
+	<li><strong>&lt;?php the_category(’, ‘) ?&gt;</strong> : 特定内容页(Post/Page)所属Category</li>
+	<li><strong>&lt;?php the_author(); ?&gt;</strong> : 作者</li>
+	<li><strong>&lt;?php the_ID(); ?&gt;</strong> : 特定内容页(Post/Page) ID</li>
+	<li><strong>&lt;?php edit_post_link(); ?&gt;</strong> : 如果用户已登录并具有权限，显示编辑链接</li>
+	<li><strong>&lt;?php get_links_list(); ?&gt;</strong> : 显示Blogroll中的链接</li>
+	<li><strong>&lt;?php comments_template(); ?&gt;</strong> : 调用留言/回复模板</li>
+	<li><strong>&lt;?php wp_list_pages(); ?&gt;</strong> : 显示Page列表</li>
+	<li><strong>&lt;?php wp_list_categories(); ?&gt;</strong> : 显示Categories列表</li>
+	<li><strong>&lt;?php next_post_link(’ %link ‘); ?&gt;</strong> : 下一篇文章链接</li>
+	<li><strong>&lt;?php previous_post_link(’%link’); ?&gt;</strong> : 上一篇文章链接</li>
+	<li><strong>&lt;?php get_calendar(); ?&gt;</strong> : 日历</li>
+	<li><strong>&lt;?php wp_get_archives() ?&gt;</strong> : 显示内容存档</li>
+	<li><strong>&lt;?php posts_nav_link(); ?&gt;</strong> : 导航，显示上一篇/下一篇文章链接</li>
+	<li><strong>&lt;?php include(TEMPLATEPATH . ‘/文件名’); ?&gt;</strong> : 嵌入其他文件，可为定制的模板或其他类型文件</li>
+</ul>
+<h5>与模板相关的其他函数</h5>
+<ul>
+	<li><strong>&lt;?php _e(’Message’); ?&gt;</strong> : 输出相应信息</li>
+	<li><strong>&lt;?php wp_register(); ?&gt;</strong> : 显示注册链接</li>
+	<li><strong>&lt;?php wp_loginout(); ?&gt; </strong>: 显示登录/注销链接</li>
+	<li><strong>&lt;!–next page–&gt;</strong> : 将当前内容分页</li>
+	<li><strong>&lt;!–more–&gt;</strong> : 将当前内容截断，以不在主页/目录页显示全部内容</li>
+	<li><strong>&lt;?php timer_stop(1); ?&gt;</strong> : 网页加载时间(秒)</li>
+	<li><strong>&lt;?php echo get_num_queries(); ?&gt;</strong> : 网页加载查询量</li>
+</ul>
+更详细的信息请参考<a href="http://codex.wordpress.org/Main_Page">WordPress官方文档</a>。

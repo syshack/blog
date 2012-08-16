@@ -1,0 +1,23 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _sinaweibo_sync: "true"
+  _sinaweibo_sync_id: "3.3437397396692E+15"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wifi
+  - 信道
+  - 关于技术
+  - 关于生活
+title: 【updated】搜索不到wifi的解决方法
+type: post
+---
+<p>这个问题困扰我很久了，搬家以后，无线网路总是有时候能搜索到有时候搜索不到，很郁闷的说。上个月就有一次笔记本突然间找不到自己屋子里的无线了，但是可以搜索到别人家的无线网络，google了很久，网卡驱动重新装了N次，后来放弃了，再后来突然又一天停电后，又找得到连得上，而且信号非常好，当时忙，也没在意，没去深挖是怎么个情况，能用就用呗。不过昨晚跳闸后，早上起来又连不上了，我就用新买的wr700n测试了下，新建个无线，连接没任何问题，那就说明无线网卡这边没问题，然后我拔了wr700n的电源，再插上，又连不上了，无线路由器设置没有改动，当时就蒙了。然后重新检查无线路由器设置，发现信道那里是设置的是自动，在路由器web界面的状态栏看着信道是13.然后 我再插再拔，搞了几次之后可以了，然后去一看信道是8，我就在想是不是和信道有关系，我就把信道那里的自动去掉，一个一个信道的测试，结果是</p>
+<blockquote><p>11以下的信道都可以检测到无线网络，而以上都不可以检测得到，就说明是信道的问题了，这也就解释了为何每次断电后无线发生异常的原因了，因为信道是自动，每次会自动选择，选到11以下就正常，11以上就无法找到网路。这下就简单了，登陆上家里的大无线路由器，把信道固定设置成8之后 ，一切正常了。</p></blockquote>
+
+谷歌了下，找到了解决方法，在无线网卡的驱动页，按以下设置
+<a href="http://www.syshacker.com/archives/1298/channelplan" rel="attachment wp-att-1301"><img src="http://www.syshacker.com/wp-content/uploads/2011/08/channelplan.jpg" alt="channelplan设置" title="channelplan" width="404" height="420" class="aligncenter size-full wp-image-1301" /></a>
+设置后，11以上的信道的wifi就可以使用了。Enjoy!

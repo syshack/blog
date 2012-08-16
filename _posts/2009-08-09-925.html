@@ -1,0 +1,66 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - apache
+  - 关于技术
+title: Apache两种运行方式比较
+type: post
+---
+那天和大家分享了Apache常见两种工作模式的对比。今天和大家分享下Apache的两种运行方式(Standalone和inetd)的比较。
+<div>standalone模式表示Apache进程以一个单独的守护进程方式在后台监听是否有客户端的请求，如果有则生成一个子进程来为其服务。在 standalone模式下，apache进程一次性启动，运行期间一直驻留在内存中，尽管损耗了一定的系统资源，但接入信号反应快；而且子httpd进 程在http请求完毕后并没有直接断掉，这样就可以重新用来接受新的http请求，请参考apache的keepalive指令（<a href="http://www.ourapache.com/archives/tag/keepalive">请看这里</a>）。由于不存在对每个请求都启动新的apache根进程，所以它的效率更高。<!--more--></div>
+<div>inetd模式表示Apache服务不是以一个单独的守候进程的形式支持。而是由Inetd这个超级守候进程进行代劳，当它监听一个客户端的http请求 的时候，再启动一个httpd进程为其服务。一个由inted运行的服务器进程在它结束对请求服务的同时立刻退出，虽然不占用了系统资源，但是也由此不适 合应用在同时连接数量较多的系统。因为如果请求完毕后就结束httpd进程，会使服务器负担加重。</div>
+<div>具体使用如下：</div>
+<div><strong>standalone模式</strong></div>
+<div>此种模式下，Apache服务器监听特定端口的连接请求。当用户发起特定端口地址的连接请求时，主服务器进程启动子httpd进程来响应该请求。</div>
+<div>这样还需要告诉主服务器进程侦听的特定端口地址，使用命令：</div>
+<div>
+<table style="border: 1px dotted #cccccc; table-layout: fixed;" border="0" cellspacing="0" cellpadding="6" width="95%" align="center">
+<tbody>
+<tr>
+<td bgcolor="#fdfddf">
+<div>Port [number] （缺省值为80）</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div><strong>inetd模式</strong></div>
+<div>inetd是监听所有小于1024的端口连接请求的Internet守护进程(一个服务器进程)。与standalone模式不同，当客户系统发出到Apache服务器的连接请求时，inetd启动一个httpd进程，由此进程服务此请求，完成服务后即退出。</div>
+<div>如果选择通过inetd服务器来运行Apache，需要编辑/etc/inetd.conf文件为Apache添加一条新的记录：</div>
+<div>
+<table style="border: 1px dotted #cccccc; table-layout: fixed;" border="0" cellspacing="0" cellpadding="6" width="95%" align="center">
+<tbody>
+<tr>
+<td bgcolor="#fdfddf">
+<div>httpd stream tcp nowait httpd /etc/httpd/bin/httpd –f  /etc/httpd/conf/httpd.conf</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>修改了/etc/inetd.conf文件后，就需要修改/etc/services中添加一行</div>
+<div>
+<table style="border: 1px dotted #cccccc; table-layout: fixed;" border="0" cellspacing="0" cellpadding="6" width="95%" align="center">
+<tbody>
+<tr>
+<td bgcolor="#fdfddf">
+<div>httpd 80/tcp httpd</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div>做完以上修改后，需要重新启动inetd进程。首先，使用以下命令取得inetd的进程ID：</div>
+<div>
+<table style="border: 1px dotted #cccccc; table-layout: fixed;" border="0" cellspacing="0" cellpadding="6" width="95%" align="center">
+<tbody>
+<tr>
+<td bgcolor="#fdfddf">
+<div>ps auxw | grep inetd</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+然后执行命令：<code>kill -HUP pid</code>

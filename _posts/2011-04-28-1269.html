@@ -1,0 +1,29 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - "619"
+  - pptp
+  - vpn
+  - 关于技术
+title: "PPTPD VPN 619错误解决"
+type: post
+---
+回头来看，确实是挺傻的，看完日志第一时间就应该想到防火墙开GRE端口的。还原事件经过吧。
+
+环境：外网PC-防火墙-内网server-内网PC
+
+症状：内网server（CentOS 5） 内网PC（XP SP3），可以正常连接VPN
+
+防火墙做MIP,开放PPTPD服务，外网PC无法正常连接VPN。
+
+日志：
+<pre escaped="true">Apr 28 09:31:45 redmine pptpd[16120]: GRE: read(fd=6,buffer=8059680,len=8196) from PTY failed: status = -1 error = Input/output error, usually caused by unexpected termination of pppd, check option syntax and pppd logs
+Apr 28 09:31:45 redmine pptpd[16120]: CTRL: PTY read or GRE write failed (pty,gre)=(6,7)</pre>
+<code></code>
+
+解决方法：防火墙开放GRE（47）端口后正常！

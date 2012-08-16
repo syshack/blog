@@ -1,0 +1,14 @@
+--- 
+layout: post
+meta: 
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - cmake
+  - 关于技术
+title: cmake备忘
+type: post
+---
+<p>现在好多开源软件都需要用cmake来编译安装，比如mysql5.5，对于习惯了 ./configure make&amp;&amp;make install的同学来说会有点困扰，就像我，查了下手册，把configure和CMake常用用法对比列出来，备忘吧。</p>  <p>1、./configure –help 对应 cmake . –LH或ccmake .</p>  <p>打印源码支持的选项，建议使用后者，看起来比较舒服</p>  <p>2、cmake编译选项写法： cmake . -Dxxxx=x </p>  <p>3、./configure 对应 camke .</p>  <p>了解这3点，对于安装一个软件就没问题了，第一个查询支持的选项，第二个添加选项，第三个编译。然后make &amp;&amp; make install就OK了~</p>

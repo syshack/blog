@@ -1,0 +1,45 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+published: true
+status: publish
+tags: 
+  - ipython
+  - Python
+  - sqlite
+  - 关于技术
+title: "ImportError:No module named _sqlite3 错误解决"
+type: post
+---
+前几天在VPS上安装Ipython，安装后执行，抛出这个错误，上周深夜整理出思路，昨天一口气解决，mark之。
+环境：编译安装的python2.6.5  Ipython0.11
+症状：运行ipython抛出ImportError:No module named _sqlite3错误
+解决方法：重新安装python-sqlite-1.1.7-0.1.2.2.el4 ，sqlite-devel-3.3.6-0.3.el4，sqlite-1.1.7-0.1.2.2.el4 三个包并重新编译Python。
+分析过程：开始觉得是缺少sqlite3的相关包，但是<pre class="brush:php">
+rpm -qa|grep sqlite</pre>后，返回<pre class="brush:php">
+sqlite-3.3.6-0.3.el4python-sqlite-1.1.7-0.1.2.2.el4sqlite-devel-3.3.6-0.3.el4</pre>说明包是存在的（这里走了弯路，存在但是不完整），然后就怀疑是版本问题，在google搜索了，确认版本无问题，然后怀疑是编译安装的过程出了问题，以为需要在编译过程中指定sqlite3库文件的目录，来到python源码目录，执行 <pre class="brush:php">
+./configuer --help|grep sqlite</pre> ，发现无返回，说明编译中没有sqlite选项，然后动了查看setup.py的念头， 发现了这个
+<pre class="brush:php">
+# The sqlite interface
+ sqlite_setup_debug = False   # verbose debug prints from this script?
+# We hunt for #define SQLITE_VERSION "n.n.n"
+# We need to find &gt;= sqlite version 3.0.8
+        sqlite_incdir = sqlite_libdir = None
+        sqlite_inc_paths = [ '/usr/include',
+                             '/usr/include/sqlite',
+                             '/usr/include/sqlite3',
+                             '/usr/local/include',
+                             '/usr/local/include/sqlite',
+                             '/usr/local/include/sqlite3',
+                           ]</pre>
+至此确定了2件事，sqlite的版本没有问题，python编译是从<pre class="brush:php">
+'/usr/include',
+'/usr/include/sqlite',
+'/usr/include/sqlite3',
+'/usr/local/include',
+'/usr/local/include/sqlite',
+'/usr/local/include/sqlite3',</pre>
+这几个目录去找sqlite的头文件的。<pre class="brush:php">
+rpm -ql sqlite-devel-3.3.6-0.3.el4 </pre>返回中有这么一行<pre class="brush:php">
+/usr/include/sqlite3.h</pre>我就去那目录去查看是否存在sqlite的头文件，结果发现没有。至此可以定位是因为sqlite开发包不完整引起的，重新安装sqlite相关的三个包，重新编译python问题解决。

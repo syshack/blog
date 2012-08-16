@@ -1,0 +1,73 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - sco507
+  - 关于技术
+title: "HP 380G5安装sco507并安装网卡驱动"
+type: post
+---
+<p align="left">一． 安装操作系统</p>
+
+<ol>
+	<li>下载带HP sas的启动引导盘（osr507boot-CD-hpsas.iso），下载地址<a href="ftp://ftpput.sco.com/tmp/osr507boot-CD-hpsas.iso">ftp://ftpput.sco.com/tmp/osr507boot-CD-hpsas.iso</a></li>
+	<li>使用下载好的Hpsas BOOT光盘启动，输入引导字符串</li>
+</ol>
+<p align="left">boot</p>
+<p align="left">: defbootstr link=fd(64)hpsas Sdsk=hpsas(0,0,0,0) Srom=wd(0,0,0,0)</p>
+<p align="left">当提示插入hpsas驱动盘时，回车继续安装</p>
+<p align="left">当系统安装蓝色界面出现后，取出Hpsas BOOT光盘，插入July 2005 OSR507 CD安装盘</p><!--more-->
+<p align="left">输入正确序列号，依提示输入必要信息</p>
+<p align="left">当信息配置结束时，见下文</p>
+<p align="left">The BTLD package will now be extracted</p>
+<p align="left">mount: Bad address</p>
+<p align="left">Please select the floppy device you are using</p>
+<p align="left">(1) /dev/fd0</p>
+<p align="left">(2) /dev/fd1</p>
+<p align="left">choose option (2) and you will be asked to insert the</p>
+<p align="left">lsil BTLD floppy disk again:  这里需要选择2</p>
+<p align="left">Please insert the floppy for BTLD package: lsil</p>
+<p align="left">and press  &lt;Return&gt;:</p>
+<p align="left">执行 RETURN 系统会有如下信息:</p>
+<p align="left">mount: Bad address, Could not mount the BTLD floppy</p>
+<p align="left">You may:</p>
+<p align="left">(a) try again</p>
+<p align="left">(b) abort BTLD load, but continue installation</p>
+<p align="left">(c) abort the installation</p>
+<p align="left">Respond with one of (a,b,c):</p>
+<p align="left">choose option "b". 这里选择b</p>
+<p align="left">直到系统安装完毕</p>
+<p align="left"></p>
+<p align="left">3.重启系统，还是用刻好的引导盘起动，制作好的Hpsas BOOT光盘启动，输入引导字符串</p>
+<p align="left">boot</p>
+<p align="left">:defbootstr link=fd(64)hpsas root=hd(42) Srom=wd(0,0,0,0)</p>
+<p align="left">其中：root=hd(42)本服务器用的是SATA硬盘，如果用的是SAS硬盘42可能要改改</p>
+<p align="left">系统引导后，进入单用户状态：</p>
+<p align="left">（注意：系统一定要进入单用户状态操作，也就是在Ctrl+D选项时，直接输入root用户口令）</p>
+<p align="left">执行以下操作安装hpsas 驱动到系统中</p>
+<p align="left">将刻好的引导盘放入光驱</p>
+<p align="left">Mount the BTLD Boot CD and install the "hpsas" BTLD:</p>
+<p align="left"># mount /dev/cd0 /mnt（挂光驱到mnt）</p>
+<p align="left"># mkdir /mnt2(新建个目录)</p>
+<p align="left"># marry -a /mnt/osr507boot-CD*</p>
+<p align="left"># mount -r /dev/marry/mnt/osr507boot-CD-hpsas.img /mnt2</p>
+<p align="left"># btldinstall /mnt2</p>
+<p align="left">提示要不要确认－回车</p>
+<p align="left">提示是否更新hpsas驱动选择“Y”，到安装完成并手工LINK核心</p>
+<p align="left">/etc/conf/cf.d/link_unix 执行relink核心</p>
+<p align="left">二．安装网卡驱动</p>
+
+<ol>
+	<li>首先去HP官方网站按照服务器型号搜索网卡驱动并下载for sco5的驱动</li>
+</ol>
+<p align="left">下载地址：http://h50176.www5.hp.com/support/397307-AA1/more_info_soar_MTX-f8f544db083e47af8168db1fc1.html</p>
+
+<ol>
+	<li>将下载的包解压，提取出对应服务器网卡型号的驱动，并刻成数据光盘</li>
+	<li>插入光盘并挂载，复制网卡驱动VOL_000.000 到/tmp，并重命名为VOL.000.000</li>
+	<li>以管理员身份运行 scoadmin software，从本地安装镜像安装，指定目录为 /tmp 执行安装并relink核心，重启就可以发现网卡了。</li>
+</ol>

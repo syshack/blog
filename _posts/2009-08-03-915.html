@@ -1,0 +1,40 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - 关于技术
+title: Apache两种常用工作模式比较
+type: post
+---
+以前一直在用Apache，却也一直不知道它有那么多的工作模式，看了手册才知道，囧！
+在这里我就prefork和worker两种最为常用的工作模式进行比较：
+prefork--Unix平台上的默认（缺省）MPM，使用多个子进程，每个子进程只有一个线程。每个进程在某个确定的时间只能维持一个连接，效率高，但内存占用量比较大。
+worker--使用多个子进程，每个子进程有多个线程，每个线程在某个确定的时间只能维持一个连接，内存占用量比较小，适合高流量的http服务器。缺点是假如一个线程崩溃，整个进程就会连同其任何线程一起"死掉"，所以要保证一个程式在运行时必须被系统识别为"每 个线程都是安全的"。
+了解了这些个之后，怎么才能知道你的Apache服务器工作在什么状态呢？使用“apachectl -l”命令就可以显示出来。
+Apache的默认的工作模式为prefork，如何把它改成worker模式呢？
+如果你还未编译安装，那就简单了，在编译的时候加个参数 “--with-mpm=worker”，就好了；
+
+如果你想更改正在运行的Apache的工作模式：
+1.将当前的prefork模式启动文件改名
+mv httpd httpd.prefork
+2.将worker模式的启动文件改名
+mv httpd.worker httpd
+3.修改Apache配置文件
+vi /usr/local/apache2/conf/extra/httpd-mpm.conf
+找到里边的如下一段，可适当修改负载等参数：
+<ifModule mpm_worker_module>
+StartServers 2
+MaxClients 150
+MinSpareThreads 25
+MaxSpareThreads 75
+ThreadsPerChild 25
+MaxRequestsPerChild 0
+</ifModule>
+4.重新启动服务
+/usr/local/apache2/bin/apachectl restart
+
+PS：处于稳定性和安全性考虑，在真正的生产环境，请勿轻易改变其工作模式。

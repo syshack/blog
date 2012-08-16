@@ -1,0 +1,38 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - 关于技术
+title: "yum Segmentation fault 解决方法"
+type: post
+---
+想在空间装一微博程序-jaiku，yum install mod_pyhon时报错，信息如下
+<pre class="brush:php">
+[root@vps yum.repos.d]#yum install 
+Loaded plugins: fastestmirror
+Determining fastest mirrors
+addons                                                                                                               |  951 B     00:00    
+addons/primary                                                                                                       |  202 B     00:00    
+Segmentation fault</pre><!--more-->
+解决办法：清理/etc/yum.repos.d里的repo文件，重新添加源，这里我使用网易的源
+<pre class="brush:php">
+[root@vps yum.repos.d]#rm -rf *.repo
+cat >>CentOS-Base.repo<<"EOF"
+name=CentOS Enterprise Linux
+baseurl=http://mirrors.163.com/centos/5.5/os/i386/
+enabled=1
+EOF</pre>
+问题解决：
+<pre class="brush:php">
+[root@vps register]# yum install mod_python
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+Setting up Install Process
+Package mod_python-3.2.8-3.1.i386 already installed and latest version
+Nothing to do</pre>
+

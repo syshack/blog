@@ -1,0 +1,40 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _thumbnail_id: "1403"
+published: true
+status: publish
+tags: 
+  - dos
+  - hash
+  - php
+  - 关于技术
+title: "PHP HashDos测试"
+type: post
+---
+<p>昨晚在微博看到 <a href="http://www.laruence.com/" title="laruence">laruence</a>提到PHP Hash 冲突拒绝服务的信息，便在自己的机器上做了下测试，测试代码来自<a href="http://www.laruence.com/" title="laruence">laruence</a><br />
+环境：</p>
+<pre "brush:php">
+Kernel:Linux ubuntu 3.0.0-14-generic #23-Ubuntu
+PHP:PHP 5.3.6-13ubuntu3.3 with Suhosin-Patch (cli) (built: Dec 13 2011 18:18:37) 
+CPU:Pentium(R) Dual-Core  CPU E5400  @ 2.70GHz
+</pre>
+<p>local-hashdos.php</p>
+
+<pre class="brush:php">
+&lt;?php
+    $size = pow(2, 16);
+
+    $startTime = microtime(true);
+    $array = array();
+    for ($key = 0, $maxKey = ($size - 1) * $size; $key &lt;= $maxKey; $key += $size) {         $array[$key] = 0;     }     $endTime = microtime(true); 
+?&gt;</pre>
+
+<p>对比图</p>
+执行中：
+<a href="http://www.syshacker.com/archives/1401/php-hash-dos" rel="attachment wp-att-1403"><img src="http://www.syshacker.com/wp-content/uploads/2011/12/php-hash-dos-300x225.png" alt="" title="php-hash-dos" width="300" height="225" class="aligncenter size-medium wp-image-1403" /></a>
+执行完成后，系统负载正常
+<a href="http://www.syshacker.com/archives/1401/exec-done" rel="attachment wp-att-1404"><img src="http://www.syshacker.com/wp-content/uploads/2011/12/exec-done-300x225.png" alt="" title="exec-done" width="300" height="225" class="aligncenter size-medium wp-image-1404" /></a>
+事实证明，BUG确实存在，而且很容易被别有用心的人利用，所以抓紧打补丁吧。
+下载补丁点<a href="https://github.com/laruence/laruence.github.com/tree/master/php-5.2-max-input-vars">这里</a>。

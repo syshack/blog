@@ -1,0 +1,182 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  IM_data: "s:20:\"a:1:{s:0:\"\";s:0:\"\";}\";"
+  _edit_last: "3"
+  _oembed_3838ae89b2e6e35eea863bbe0c839d51: "{{unknown}}"
+  _oembed_bdd6a1e80d16d79651742c79df87711f: "{{unknown}}"
+  _oembed_c7d9642035fe73b2cd0f932e43d0136b: "{{unknown}}"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+title: 10个WordPress技巧
+type: post
+---
+原文出自<a href="http://www.blogohblog.com/10-wordpress-hacks-to-make-your-life-easy/">Blogohblog</a>
+原文作者：jai
+翻译：<a href="http://127.0.0.1">Sean</a>
+如须转载请添加原链接清楚标明出处。
+<strong>1.评论中显示Gravatars </strong>
+打开你的comments.php用下边代码
+<code>
+<div class="gravs">=2.5)
+echo get_avatar( $comment-&gt;</div>
+<div class="gravs">comment_author_email, $size = '50',</div>
+<div class="gravs">$comment-&gt;comment_author_link);
+?&gt;</div>
+</code>
+替换<!--more-->
+
+添加CSS代码到style.css，
+<code>.gravs {margin-top:20px;}
+.avatar {
+float:left; margin-right:5px;
+margin-bottom:5px;
+padding:3px;
+border:1px
+solid #999999;}
+</code>
+<strong>２.WordPress画廊</strong>
+在你的主题文件夹里打开single.php并保存为image.php
+找到
+
+在它上边添加
+<code>
+</code>
+<p class="attachment"><a href="&lt;?php echo wp_get_attachment_url($post-&gt;ID); ?&gt;">ID, 'medium' ); ?&gt;</a></p>
+
+<div class="caption">post_excerpt) ) the_excerpt(); // this is the "caption" ?&gt;</div>
+在它下边插入
+<code>
+</code>
+
+添加下边代码到你的style.css
+<code>
+/*Image Gallery */
+.gallery {text-align:center;}
+.gallery img
+{padding:2px; height:100px; width:100px;}
+.gallery a:hover {background-color:#ffffff;}
+.attachment {text-align:center;}
+.attachment img
+{ padding:2px; border:1px solid #999999;}
+.attachment a:hover
+{background-color:#FFFFFF;}
+.imgnav {text-align:center;}
+.imgleft {float:left;}
+.imgleft a:hover {background-color:#FFFFFF;}
+.imgleft img
+{ padding:2px; border:1px solid #999999;
+height:100px; width:100px;}
+.imgright {float:right;}
+.imgright a:hover {background-color:#FFFFFF;}
+.imgright img{ padding:2px;
+border:1px solid #999999;
+height:100px; width:100px;}
+</code>
+<strong>3.每个日志后边添加订阅信息</strong>
+在你的index.php中的the_content结束后添加下边代码
+<code>
+</code>
+<div style="padding: 5px;">RSS Feed</div>
+这个是可以定制的，样式可以看自己喜欢！
+<strong>4.在你博客显示Twitter信息</strong>
+
+去<a href="http://www.twitter.com">Twitter.com</a>注册一个帐号，登录然后到
+
+http://twitter.com/badges/html，
+
+有一个把Twitter发布在博客的选项，按照你喜欢的类型，
+
+选择代码，复制！然后粘贴到你要调用的地方！
+<strong>5.显示作者资料</strong>
+打开single.php文件，在the_content()前 ，添加此代码：
+<code>
+</code>
+
+现在，添加下面的CSS代码到您的style.css
+<code>.author{
+color: #222222;
+font-family: Arial;
+font-size: 12px;
+border:1px solid #CCCCCC;
+width: 500px;
+padding: 5px;
+margin-top:10px;
+margin-bottom:10px;
+}</code>
+<strong>6.给分类添加下拉菜单</strong>
+
+插入下边代码到sidebar.php或index.php 的任何地方
+<code>
+</code>
+
+<form action="&lt;?php bloginfo('url'); ?&gt;/" method="get"> $select = wp_dropdown_categories('show_option_none=Select category&amp;show_count=1&amp;orderby=name&amp;echo=0');
+$select = preg_replace("#
+]*)&gt;#", "
+", $select);
+echo $select;
+?&gt;
+<noscript>&amp;lt;input type="submit" value="View" /&amp;gt;</noscript>
+
+<strong>7.给档案添加下拉菜单</strong>
+像在类别，您可以让您每月的档案在下拉菜单中列出。
+将以下代码添加到您的模板文件：
+
+<select name="archive-dropdown"> <option></option> </select>
+<strong>8.添加125 × 125广告投放到您的侧边栏</strong>
+手好冷，直接上代码吧！把下边代码放到你希望出现广告的地方
+<code>
+</code>
+<div class="bannerads">
+<div class="ad_125x125"><a href="#"><img src="&lt;?php bloginfo('template_directory'); ?&gt;/ads/125x125.gif" border="0" alt="Advertising" /></a></div>
+<div class="ad_125x125"><a href="#"><img src="&lt;?php bloginfo('template_directory'); ?&gt;/ads/125x125.gif" border="0" alt="Advertising" /></a></div>
+</div>
+<!-- bannerads -->
+最后，添加下面的CSS代码到您的style.css文件：
+<code>.bannerads
+{width:270px; margin:10px auto;}
+.ad_125x125
+{float:left; margin:0px 5px 10px 5px;
+width:125px; height:125px;}</code>
+<strong>9.显示评论最多博文</strong>
+将下边代码插入到你主题文件夹里的header.php末尾
+<code>', $after = ' </code>
+
+', $show_pass_post = false, $duration='') {
+global $wpdb;
+$request = "SELECT ID, post_title, COUNT($wpdb-&gt;comments.comment_post_ID) AS 'comment_count' FROM $wpdb-&gt;posts, $wpdb-&gt;comments";
+$request .= " WHERE comment_approved = '1' AND $wpdb-&gt;posts.ID=$wpdb-&gt;comments.comment_post_ID AND post_status = 'publish'";
+if(!$show_pass_post) $request .= " AND post_password =''";
+if($duration !="") { $request .= " AND DATE_SUB(CURDATE(),INTERVAL ".$duration." DAY) &lt; post_date ";
+}
+$request .= " GROUP BY $wpdb-&gt;comments.comment_post_ID ORDER BY comment_count DESC LIMIT $no_posts";
+$posts = $wpdb-&gt;get_results($request);
+$output = '';
+if ($posts) {
+foreach ($posts as $post) {
+$post_title = stripslashes($post-&gt;post_title);
+$comment_count = $post-&gt;comment_count;
+$permalink = get_permalink($post-&gt;ID);
+$output .= $before . '<a title="' . $post_title.'" href="' . $permalink . '">' . $post_title . '</a> (' . $comment_count.')' . $after;
+}
+} else {
+$output .= $before . "None found" . $after;
+}
+echo $output;
+} ?&gt;
+
+你可以通过修改$no_posts 的量来改变显示的博文数
+你可以用下边代码来调用它
+
+<strong>10.为你的博文增加打印按钮</strong>
+添加下边代码到任何你想出现按钮的地方
+<code><a href="javascript:window.print()">Print this Article</a></code>
+
+</form>

@@ -1,0 +1,74 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - apache
+  - lamp
+  - mysql
+  - php
+  - 关于技术
+title: LAMP搭建之PHP篇
+type: post
+---
+LAMP，顾名思义 linux+apache+mysql+php，是现在网络上最流行的网页应用架构。
+
+PHP是最网络上最流行的动态网页编程语言。
+
+步骤1：解压源码包
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image11.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image1" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image1-thumb1.png" border="0" alt="wps_clip_image1" width="244" height="11" /></a>
+
+步骤2：编译前配置
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image21.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image2" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image2-thumb1.png" border="0" alt="wps_clip_image2" width="244" height="37" /></a><!--more-->
+
+步骤3：编译并安装
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image31.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image3" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image3-thumb1.png" border="0" alt="wps_clip_image3" width="244" height="15" /></a>
+
+不同机器编译所用时间差别很大，耐心等待。
+
+步骤4：生成php.ini配置文件。
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image41.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image4" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image4-thumb1.png" border="0" alt="wps_clip_image4" width="244" height="15" /></a>
+
+步骤5：修改/usr/local/apache2/conf/httpd.conf配置文件。
+
+确认已有如下一行：
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image51.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image5" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image5-thumb1.png" border="0" alt="wps_clip_image5" width="244" height="19" /></a>
+
+如果这行不存在，则可能是编译不成功。
+
+添加如下行：
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image61.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image6" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image6-thumb1.png" border="0" alt="wps_clip_image6" width="244" height="19" /></a>
+
+找到如下配置行：
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image71.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image7" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image7-thumb1.png" border="0" alt="wps_clip_image7" width="244" height="20" /></a>
+
+后面添加index.php：
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image81.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image8" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image8-thumb1.png" border="0" alt="wps_clip_image8" width="244" height="16" /></a>
+
+步骤6：重启Apache
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image9.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image9" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image9-thumb.png" border="0" alt="wps_clip_image9" width="244" height="20" /></a>
+
+步骤7：创建测试页面并通过IE访问验证。
+
+生成/usr/local/apache2/htdocs/test.php文件，内容如下：
+
+<a rel="lightbox" href="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image10.png"><img style="border-bottom: 0px; border-left: 0px; display: inline; border-top: 0px; border-right: 0px" title="wps_clip_image10" src="http://www.syshacker.com/wp-content/uploads/2009/01/wps-clip-image10-thumb.png" border="0" alt="wps_clip_image10" width="164" height="57" /></a>
+
+通过IE访问验证：
+
+<a href="http://IP/test.php">http://IP/test.php</a>
+
+如果出现php的版本及配置信息则说明PHP配置成功。

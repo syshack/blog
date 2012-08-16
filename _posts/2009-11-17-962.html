@@ -1,0 +1,39 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - "RealTek RTL8101E"
+  - 关于技术
+title: "linux下安装RealTek RTL8101E网卡驱动"
+type: post
+---
+公司新买了几台机器，老板让给装上RHEL4给做测试机用。
+
+装完系统后，发现识别不了网卡，ifconfig只有一个回环，很郁闷。
+
+然后就上网查了下资料，发现这个主板集成的网卡是RealTek RTL8101E，网卡比较新，RHEL4里面没有集成这个网卡的驱动。
+
+所以，只有自己动手丰衣足食了，点开 google，搜索了半天，找了个RealTek RTL8101E for linux的驱动，现将安装过程给大家分享下，需要驱动程序的可以留言给我，我发邮箱。<!--more-->
+
+解压就不用说了呵呵。
+
+首先进入驱动目录（别告诉我不知道怎么进。cd）
+
+进去后，具体安装命令为
+
+su - root
+
+make clean modules
+
+make install
+
+depmod -a
+
+modprobe r8101
+
+完了之后，你执行 ifconfig 就会发现网卡咯。。

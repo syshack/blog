@@ -1,0 +1,73 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - 关于生活
+title: python调用C函数（一）
+type: post
+---
+python调用C，目前，看到了以下几种方式
+
+1. 把c编译成动态链接库，然后通过cdll模块来调用c暴露的接口，其实这是二进制ABI接口
+2. 通过c把函数注册给python，依旧是dll/so的模式，但是，python不需要通过cdll模块来调用函数，可以和python内置函数一样调用
+
+首先是如何通过动态连接库的方式来调用c函数：
+定义一个func函数，然后，把他编译成一个动态链接库
+cl /c demo.c 
+link /DLL demo.o /out:demo.dll
+
+gcc -c -fPIC demo.c -o demo.o
+gcc -shared demo.o -o demo.so
+
+// demo.c
+#ifdef MSVC
+#define PYAPI __declspec(dllexport) 
+#else
+#define PYAPI
+#endif
+
+/*
+ *  定义一个func函数，供python调用
+*/
+int PYAPI func(int a, int b)
+{
+    return a + b
+}
+
+------------------------------------cut line---------------------------
+
+import sys
+sys.path.append('./') 
+from ctypes import cdll
+
+dll = cdll.LoadLibrary('demo')      # 加载函数所在的动态连接库
+ret = dll.func(1, 100)      # 调用动态链接库内部的func函数
+print ret
+
+需要注意的是，对于windows平台，绝大部分的API都是stdcall，对于stdcall函数，如果需要调用的话，需要使用windll，而不是cdll，否则会导致堆栈不平衡崩溃。
+（注意，windows user32.dll下面的那些函数，比如sprintf_s等等，都用cdll调用）
+
+如果把PYAPI宏这样定义：
+#define PYAPI __declspec(dllexport)  __stdcall
+
+那么，就需要用windll了
+
+import sys
+sys.path.append('./')
+from ctypes import windll
+dll = windll.LoadLibrary('demo')
+ret = dll.func(1, 100)
+print ret
+
+其实，windll只是继承了一下cdll，更改了下函数调用约定，仅此而已
+
+
+看起来，似乎是没有啥问题了，但是如果C暴露给python的函数，参数是struct类型，python里面看起来是，是没有struct类型的，那么，如何调用C的函数呢？
+
+这里，就需要一个新的class了
+ctypes.Structure

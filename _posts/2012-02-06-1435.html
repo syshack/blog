@@ -1,0 +1,55 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+published: true
+status: publish
+tags: 
+  - git
+  - rpm
+  - 关于技术
+title: "[转载&mark]使用git打包RPM"
+type: post
+---
+写好程序，编辑好makefile后，就可以按照以下方法获得spec文件了。
+<pre class="csharpcode">$ cd hello-0.2 你的源代码目录
+$ git init 初始化git
+Initialized empty Git repository <span class="kwrd">in</span> /home/admin/work/hello-0.2/.git/
+$ git add -A
+$ git commit -m init
+ 3 files changed, 73 insertions(+), 0 deletions(-)
+ create mode 100644 Makefile
+ create mode 100644 hello.c
+ create mode 100644 hello.spec
+$ git archive --prefix=hello-0.2/ master|gzip &gt; hello-0.2.tar.gz
+$ ls
+hello-0.2.tar.gz  hello.c  hello.spec  Makefile 生成了spec文件
+$rpmbuild –ba hello.spec 就会生成RPM包了~</pre>
+
+<p>&#160;</p>
+
+<p><style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>学习git的时候，在<a href="http://www.worldhello.net/2011/04/08/2415.html" target="_blank">这里</a>发现的。</p>

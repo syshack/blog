@@ -1,0 +1,17 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+  - 自定义域
+title: 自定义域的用法
+type: post
+---
+<p>使用Wordpress已经有一段时间了，我对Wordpress的自定义字段很是喜欢，有了自定义字段，可以完成很多自定义的功能。</p>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 自定义字段在每次发表新日志的时候都会看到（如下图），怎么用这个问题已经很老了，大多数人都会的，少数新用户可以上google搜一下:-) 我的一个建议就是把建一个自定义字段看成是在数据库建一个新字段，然后在主题中调用。本篇文章主要就介绍一下自定义字段的一些妙用吧，也可以说是一些总结，加上一些自己经常用的经验。</p>  <p><img title="custom-fields" alt="custom-fields" src="http://www.atmoment.cn/wp-content/uploads/2009/01/custom-fields-450x188.jpg" width="450" height="188" /></p>  <p><strong></strong></p> <!--more-->  <p><strong>巧用Wordpress自定义字段定义Meta标签（可以小小SEO一下）</strong></p>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 发表日志的时候，在自定义字段的名称里面分别定义keywords和description （当然可以自己另取名称），在值里面填入该文章的keywords、description信息。然后就可以调用了。</p>  <ol>   <li>&lt;?php if ( is_single() ) { ?&gt;</li>    <li>&lt;meta name=&quot;keywords&quot; content=&quot;&lt;?php $key=&quot;keywords&quot;; echo get_post_meta($post-&gt;ID, $key, true); ?&gt;&quot; /&gt;</li>    <li>&lt;meta name=&quot;description&quot; content=&quot;&lt;?php $key=&quot;description&quot;; echo get_post_meta($post-&gt;ID, $key, true); ?&gt;&quot; /&gt;</li>    <li>&lt;?php } ?&gt;</li> </ol>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 这样就能调用了，很简单吧，如果你没在用SEO插件的话，这样对SEO还有一定的好处，当然也完全可以取代插件。</p>  <p><strong>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 使用自定义字段给Wordpress添加分类主题图片</strong></p>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 现在有一些资讯网站或者一些博客网站上面的每一条新闻或者是日志上面都有一个主题图片(如下图)，这个功能通过WP的自定义字段也可以做到。我就以下图为例。</p>  <p><img title="fenleipic" alt="fenleipic" src="http://www.atmoment.cn/wp-content/uploads/2009/01/fenleipic-450x291.jpg" width="450" height="291" /></p>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 先在自定义字段里面新建一个字段“topic_img”,值里面就填你做好的图片的地址，然后在WP的主题里调用就可以了。</p>  <ol>   <li>&lt;?php if ( get_post_meta($post-&gt;ID, ‘pre_image‘, true) ) : ?&gt;</li>    <li>&lt;?php $image = get_post_meta($post-&gt;ID, ‘pre_image‘, true); ?&gt;</li>    <li>&#160;&#160;&#160; &lt;img src=&quot;&lt;?php echo $image; ?&gt;&quot;&#160; /&gt;</li>    <li>&lt;?php else: ?&gt;</li>    <li>&#160;&#160;&#160; &lt;img src=&quot;&lt;?php bloginfo(‘template_directory‘); ?&gt;/images/blank.jpg&quot; /&gt;</li>    <li>&lt;?php endif; ?&gt;</li> </ol>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 你会看到上面的代码，第5行是定义如果没有输入值的情况下显示的默认图片，你可以自己定义地址。当然你也可以给图片加上width，border，或者定义其他的样式，完全可以按自己的喜欢来做。</p>  <p><strong>妙用自定义字段添加任何需要的东西</strong></p>  <p><strong></strong>如果你想用WP构建一个非博客的站点，那你发表的文章肯定需要其他一些东西，比如你要做一个淘客网站，那么你肯定需要添加商品的价格，推广的链接或者是更多你想要的，还是同样道理，发表的时候建自定义字段，然后在主题里调用。就不一一举例了。</p>  <p>&#160;&#160;&#160;&#160;&#160;&#160;&#160; 写到这里的时候突然有个想法，对希望在博客中放置广告的朋友可能会有点帮助。有些Blogger会根据不同主题的日志放置不同的广告，这个也可以用自定义字段来实现，就是建一个“advertise”的自定义字段，然后就可以调用来实现了，这个功能可以和一些广告插件一起使用，当没有输入这个自定义字段的时候就显示默认的广告。</p>  <p>Wordpress的自定义字段真的非常强大，可以让你不用去修改程序就做到很多复杂的工作，让建站变得更简单。</p>  <p>PS: 写得不好，希望对各位看官有所帮助，如果有问题就给我留言吧！</p>  <p>本文系转载，版权归原作者所有</p>  <p>原文地址 : <a href="http://www.atmoment.cn/wordpress/wordpress-custom-fields">http://www.atmoment.cn/wordpress/wordpress-custom-fields</a></p>

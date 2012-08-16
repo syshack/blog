@@ -1,0 +1,46 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+published: true
+status: publish
+tags: 
+  - iphone
+  - 关于技术
+  - 关于生活
+  - 有关互联网
+  - 翻墙
+title: "【转载&整理&mark】iphone使用ssh tunnel+PAC翻墙"
+type: post
+---
+1、确定你的iPhone已经越狱，且安装了OpenSSH和MobileTerminal。
+
+2、将附件里iphone.pac上传到iPhone的/var/mobile文件夹中。更新一个overall.pac(全局)，但还是无法观看Youtube，所以最好还是用前者。
+
+3、在“设置”》“Wi-Fi”中设置你用的无线网络，“HTTP代理”处选择“自动”，“URL”填“file://localhost/var/mobile/iphone.pac”。
+<img src="http://onenote.officeapps.live.com/o/GetImage.ashx?Fi=SD75C671195FB69187!735&amp;C=1__BL2-SKY-WAC-WSHI&amp;ObjectDataBlobId={71cb0ce6-6c83-42f0-8100-081a0e521d1c}{1}" alt="" />
+4、打开Terminal，输入“ssh -D 7070 用户名@服务器地址”，如：ssh -D 7070 todaym@dreamhost.com，首次连接会提示（yes/no），输入“yes”，然后输入密码。
+<img src="http://onenote.officeapps.live.com/o/GetImage.ashx?Fi=SD75C671195FB69187!735&amp;C=1__BL2-SKY-WAC-WSHI&amp;ObjectDataBlobId={01b85c37-fd4f-4cc9-b26f-6825fbae590c}{1}" alt="" />
+5、提示连接成功后，别退出Terminal，按“Home”键回到桌面，打开Safari享受没有国界的网络吧。
+
+6、关闭SSH连接时输入“logout”，然后再退出Terminal。
+
+&nbsp;
+
+在3G或者EDGE下面如何使用？
+
+SFTP进iPhone，
+在private/var/preferences/systemconfiguration 里找到preferences.plist，备份之后进行修改，可用文本编辑。
+
+在com.apple.CommCenter (ip1)
+之后，
+
+UserDefinedName之前
+
+插入以下代码：
+<a href="http://www.syshacker.com/archives/1423/%e4%bb%a3%e7%a0%81" rel="attachment wp-att-1429"><img src="http://www.syshacker.com/wp-content/uploads/2012/01/代码-300x73.jpg" alt="" title="代码" width="300" height="73" class="aligncenter size-medium wp-image-1429" /></a>
+<div id="scid:fb3a1972-4489-4e52-abe7-25a00bb07fdf:a9074c05-5585-4033-8de7-c9ce32b36e8f" class="wlWriterEditableSmartContent" style="display: inline; float: none; margin: 0px; padding: 0px;">
+
+PAC文件 <a href="http://www.syshacker.com/wp-content/uploads/2012/01/pac.zip" target="_blank">下载</a>
+
+</div>

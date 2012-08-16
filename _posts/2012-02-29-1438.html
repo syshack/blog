@@ -1,0 +1,201 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - Python
+  - 关于技术
+title: python程序文件名和模块名相同引发的血案
+type: post
+---
+<p>血案回放：</p>  <p>在练习写一个使用optparse模块的练习脚本，命名为optparse.py</p>  <pre class="csharpcode"><span class="rem">#!/usr/bin/python</span>
+from optparse import OptionParser
+parser=OptionParser()
+parser.add_option(<span class="str">&quot;-f&quot;</span>, <span class="str">&quot;--file&quot;</span>, dest=<span class="str">&quot;filename&quot;</span>,
+                  help=<span class="str">&quot;write report to FILE&quot;</span>, metavar=<span class="str">&quot;FILE&quot;</span>)
+parser.add_option(<span class="str">&quot;-q&quot;</span>, <span class="str">&quot;--quiet&quot;</span>,
+                  action=<span class="str">&quot;store_false&quot;</span>, dest=<span class="str">&quot;verbose&quot;</span>, <span class="kwrd">default</span>=True,
+                  help=<span class="str">&quot;don't print status messages to stdout&quot;</span>)
+(options, args) = parser.parse_args()</pre>
+
+<p>看着眼熟？没错，就是官方的一个例子。有错误？反正我没看出来</p>
+
+<p>但是执行 ./optparse.py 会报错</p>
+
+<pre class="csharpcode">Traceback (most recent call last):
+  File <span class="str">&quot;./optparse.py&quot;</span>, line 2, <span class="kwrd">in</span> &lt;module&gt;
+    from optparse import OptionParser
+  File <span class="str">&quot;optparse.py&quot;</span>, line 2, <span class="kwrd">in</span> &lt;module&gt;
+    from optparse import OptionParser
+ImportError: cannot import name OptionParser&quot;</pre>
+<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>进入python的CLI模式</p>
+
+<pre class="csharpcode">[root@node1 ~]<span class="rem"># python</span>
+Python 2.6.5 (r265:79063, Nov 12 2010, 00:45:29) 
+[GCC 4.4.4 20100525 (Red Hat 4.4.4-5)] on linux2
+Type <span class="str">&quot;help&quot;</span>, <span class="str">&quot;copyright&quot;</span>, <span class="str">&quot;credits&quot;</span> or <span class="str">&quot;license&quot;</span> <span class="kwrd">for</span> more information.
+&gt;&gt;&gt; import optparse
+Traceback (most recent call last):
+  File <span class="str">&quot;&lt;stdin&gt;&quot;</span>, line 2, <span class="kwrd">in</span> &lt;module&gt;
+  File <span class="str">&quot;optparse.py&quot;</span>, line 2, <span class="kwrd">in</span> &lt;module&gt;
+    from optparse import OptionParser
+ImportError: cannot import name OptionParser</pre>
+
+<p>很奇怪的错误吧，开始怀疑是不是没有optparse模块</p>
+
+<pre class="csharpcode">[root@node1 ~]<span class="rem"># python</span>
+Python 2.6.5 (r265:79063, Nov 12 2010, 00:45:29) 
+[GCC 4.4.4 20100525 (Red Hat 4.4.4-5)] on linux2
+Type <span class="str">&quot;help&quot;</span>, <span class="str">&quot;copyright&quot;</span>, <span class="str">&quot;credits&quot;</span> or <span class="str">&quot;license&quot;</span> <span class="kwrd">for</span> more information.
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; print sys.path
+[<span class="str">''</span>, <span class="str">'/usr/lib/python26.zip'</span>, <span class="str">'/usr/lib/python2.6'</span>, <span class="str">'/usr/lib/python2.6/plat-linux2'</span>, <span class="str">'/usr/lib/python2.6/lib-tk'</span>, <span class="str">'/usr/lib/python2.6/lib-old'</span>, <span class="str">'/usr/lib/python2.6/lib-dynload'</span>, <span class="str">'/usr/lib/python2.6/site-packages'</span>, <span class="str">'/usr/lib/python2.6/site-packages/gtk-2.0'</span>, <span class="str">'/usr/lib/python2.6/site-packages/setuptools-0.6c11-py2.6.egg-info'</span>]</pre>
+<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>搜索sys.path路径</p>
+
+<pre class="csharpcode">[root@node1 ~]<span class="rem"># find /usr/lib/python2.6/ -name &quot;optparse*&quot;</span>
+/usr/lib/python2.6/optparse.pyc
+/usr/lib/python2.6/optparse.py
+/usr/lib/python2.6/optparse.pyo</pre>
+<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>说明optparse模块是有的。</p>
+
+<p>为此我纠结了2个小时。中间吃了个饭回来，发现当前目录下有个optparse.pyc ，想到是不是python把我新建的文件当成模块了，然后再回头看sys.path，发现第一项是””，然后豁然开朗，python加载模块的时候就会从当前路径先找，而我在当前目录建立了个模块文件相同名字的py程序，所以就会加载失败，报错。为了验证我的想法我把py程序的名字改成optparse2.py，运行<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style></p>
+
+<pre class="csharpcode">[root@node1 ~]# mv optparse.py optparse2.py
+[root@node1 ~]# rm -rf optparse.pyc
+[root@node1 ~]# python optparse2.py 
+None</pre>
+<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>运行没有问题，不报错了。</p>
+
+<p>结论：在命名程序文件的时候，要避免和模块文件重名。如果程序只自己用的话，从sys.path里把“”放在最后。</p>

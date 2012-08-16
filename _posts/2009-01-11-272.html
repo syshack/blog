@@ -1,0 +1,123 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 关于技术
+title: WordPress技巧汇总
+type: post
+---
+所有内容来自<a href="http://parandroid.com">帕兰映像</a>，我只是把我觉得有用的汇总下！
+<strong>1.调用最新文章</strong>
+<code>
+<?php get_archives('postbypost', N); ?> (显示N篇最新更新文章)
+</code>
+或者<code>
+<?php wp_get_archives('type=postbypost
+&limit=20&format=custom'); ?></code>
+后面这个代码显示你博客中最新的20篇文章，其中format=custom这里主要用来自定义这份文章列表的显示样式。具体的参数和使用方法你可以参考官方的使用说明- wp_get_archvies。(fromat=custom也可以不要，默认以UL列表显示文章标题。)<!--more-->
+<strong>2.随机文章</strong>
+<code><?php
+$rand_posts = get_posts('numberposts=10&orderby=rand');
+foreach( $rand_posts as $post ) :
+?>
+<!--下面是你想自定义的Loop-->
+<li><a href="<?php the_permalink(); ?>">
+<?php the_title(); ?></a></li>
+<?php endforeach; ?>
+</code>
+<strong>3.最新留言</strong>
+<code><?php
+global $wpdb;
+$sql = "SELECT DISTINCT ID, post_title, post_password, comment_ID,
+comment_post_ID, comment_author, comment_date_gmt, comment_approved,
+comment_type,comment_author_url,
+SUBSTRING(comment_content,1,30) AS com_excerpt
+FROM $wpdb->comments
+LEFT OUTER JOIN $wpdb->posts ON ($wpdb->comments.comment_post_ID =
+$wpdb->posts.ID)
+WHERE comment_approved = '1' AND comment_type = '' AND
+post_password = ''
+ORDER BY comment_date_gmt DESC
+LIMIT 10";<!-- 显示条目-->
+$comments = $wpdb->get_results($sql);
+$output = $pre_HTML;
+<!-- 留言输出样式-->
+foreach ($comments as $comment) {
+$output .= "n<li>".
+strip_tags($comment->comment_author).":" . " <a href="" . get_permalink($comment->ID) .
+"#comment-" . $comment->comment_ID . "" title="on " .
+$comment->post_title . "">" .
+strip_tags($comment->com_excerpt)
+."</a></li>";
+}
+
+$output .= $post_HTML;
+echo $output;?>
+</code>
+
+<strong>4.为不同分类日志设置不通的样式</strong>
+使用 If in_category 条件标签
+首先，复制两个single.php文件分别取名为
+
+single1.php和single.2.php.
+
+然后，把原先的single.php文件里面的内容全部删除，并用下面的代码进行替换:
+
+
+--------------------------------------------------------------------------------
+<?php
+$post = $wp_query->post;
+if ( in_category('9') ) {
+include(TEMPLATEPATH . '/single2.php');
+} else {
+include(TEMPLATEPATH . '/single1.php');
+}
+?>
+--------------------------------------------------------------------------------
+简单的说, 这串 PHP 代码将做出一个质疑查询:
+
+检查日志. 如果日志是属于分类 ID 9下面,
+
+显示single2.php. 如果不是，则显示 single1.php.
+在 in_category(), 我们设置category ID为 9, 该分类下面显示我博客里面所有关于网页设计的文章. 当用户点击这个分类下面的文章时, 自定义的样式表将使用到这些文章里面。
+
+这仅仅是个简单的示例，你还可以使用更多的条件语句来为不同的类别指定不同的样式和内容，下面是一个示例:
+
+<code><?php
+$post = $wp_query->post;
+if ( in_category('9') ) {
+include(TEMPLATEPATH . '/single9.php');
+elseif ( in_category('12') ) {
+include(TEMPLATEPATH . '/single12.php');
+elseif ( in_category('42') {
+include(TEMPLATEPATH . '/single42.php');
+} else {
+include(TEMPLATEPATH . '/single1.php');
+} }</code>
+?>在我的两个复制“single”的模板文件里面, 我都在顶部放置了提醒作用的注释代码，就像下面这样:
+
+<!-- single 2 - for CSS Web Page Articles -->
+因为我并不想都改变这两个模板文件, 而仅仅是添加额外的样式表到第二个也就是single2.php文件, 于是我创建两个header模板文件,
+
+就像复制single.php那样, 然后在第二个header文件的顶部添加上外部样式表的链接，像这样:
+
+<code><style type="text/css" media="screen">
+@import URL('/wp-content/themes/mytheme/style.css');
+@import URL('/wp-content/themes/mytheme/cssstyles.css');
+</style ></code>
+接着，就是要在第二个single2.php里面调用
+header2.php:
+<code><?php
+/* Don’t remove this line. */
+require('./wp-blog-header.php');
+include(get_template_directory() . '/header2.php'
+?></code>
+
+to be continue！我在学习的过程中，将继续总结的！

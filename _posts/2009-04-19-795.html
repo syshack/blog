@@ -1,0 +1,82 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - flash
+  - php
+  - 关于技术
+  - 相册
+title: 隆重推荐：Imagevue相册
+type: post
+---
+这个程序收藏很久了，一直没有用，因为我没有很多图片。囧！
+
+最近有朋友要我推荐个相册程序，我就突然想起来，我还有套正版的这玩意，闲置着也是闲置着就给朋友用了，呵呵！
+
+废话不说，主角华丽登场。掌声！
+
+Imagevue是一款基于php+flash的网络相册程序，最新版本是v2，效果可是相当华丽，见图说话：
+后台：
+<a rel="attachment wp-att-796" href="http://www.syshacker.com/?attachment_id=796"><img class="aligncenter size-medium wp-image-796" title="imagevueadmin" src="http://127.0.0.1/wp-content/uploads/2009/04/e69caae591bde5908d-300x170.jpg" alt="imagevueadmin" width="300" height="170" /></a>
+默认主题：
+<a rel="attachment wp-att-797" href="http://www.syshacker.com/?attachment_id=797"><img class="aligncenter size-medium wp-image-797" title="black" src="http://127.0.0.1/wp-content/uploads/2009/04/e5898de58fb0-300x171.jpg" alt="black" width="300" height="171" /></a>
+官方demo地址：<a href="http://www.imagevuex.com/imagevue/demo">http://www.imagevuex.com/imagevue/demo</a>
+
+功能&amp;特色：
+
+功能介绍
+1、 自动生成缩略图 （需GD库）
+2、 支持背景音乐，并有相当成熟的流出理能力。
+3、 支持POPUP窗口，图片特写。
+4、 动态预览窗口
+5、 方向键控制
+6、 幻灯片功能
+7、 在线、本地管理功能
+8、 支持语言文件编辑
+9、支持cache
+10、支持多人分级管理
+11、支持背景音乐
+...更多特色功能，等待您的发掘！
+
+安装方法：
+
+直接将文件上传到你的网站目录就可以了。
+
+使用配置
+压缩包内有三个目录，documentation是说明文档(英文)，source是FLASH模板的源程序，upload是主程序，我们在虚拟主机建立一个目录，例如pic，然后将压缩包中的upload目录里面的全部文件及目录上传就可以了。upload文件夹中包含一个test子文件夹，运行该文件夹中的index.php可以检测服务器环境（GDtest DIRtest Permissions PHPinfo ），看你的服务器对imageevue的支持度是否良好。
+图片是存放在content目录，你可以在上面建立多个目录，菜单会自动生成。文件夹和文件名中间不能带空格，否则无法显示。最多支持二级目录，否则显示有问题。原图片建议不要选择过大，要不然载入时间会过长，如果你的服务器速度快，就放原图的好。
+
+个性化config.ini文件解读：
+
+backgroundimage = back.jpg//设置管理界面左上角的背景图片//
+guestlogininfo = true //在登陆处，允许或禁止显示告诉用户可以作为guest用户做限制访问的信息。如果选择为true，意味着你愿意保留特殊的guest密码在你的password.php文档.如果设置为false，你将清除它//
+foldersorting = dd //设置在主菜单输出分类文件夹的方式.影响图片文件夹和组文件夹.dd(时间降序) da(时间升序) na(名称升序) nd(名称降序) rnd(随机显示)
+contentfolder = content/ //设置管理员编辑的内容文件夹.也可以通过URL设置。//
+imagesorting = na //设置图片列表输出图片的方式。参数和foldersorting相同//
+globalpath = //设置管理后台的相对地址或绝对地址//
+startheading = sitename 相册标题
+startimage = load.jpg 编辑初始Flash载入图像
+swflayer = false 窗口内外挂Flash，填入swf相对路径，在察看图像时会消失。
+startfx = true 调用内置的flash效果修饰主窗口，可选值：blur，true ，false
+textcol = 34507A 菜单文本颜色
+bgcol = EFEFEF 背景颜色
+barcol = false 导航栏颜色，此处未定义，故为false
+menucol = bgcol,textcol ，导航栏配色，此处设定值表示继承之前设定的颜色，也可选设值：false ，bgcol,textcol ，textcol,bgcol ，[HEX color,HEX color] （注意要设置两个Hex值对应文本和菜单颜色）
+backimage = back.jpg ，网页窗口的背景图片
+backalign = TL，背景图片对齐方式，可选值：TL (Top Left)， T (Top) ，TR (Top Right) ，R (Right) ，BR (Bottom Right)， B (Bottom)， BL (Bottom Left) ，L (Left) ，M (Middle)
+audiopath = mp3/ 设定mp3 播放目录
+navigation = 1,1,1,1,1,0,0，导航栏的风格设定，7个值分别对应[nextbutton],[previousbutton],[thumbnails],[motion],[open in popup],[open in blank],[toggle sound FX]，1代表yes，0代表no。
+imagepopinfo = 1,1,0,0,0,1 鼠标悬浮图像是显示信息设定，六个值分别对应，[clickaction, imagename, imagedimensions, imagesize, imagedate, description]（强烈建议全部选上，要不然你的图片无法下载）
+popdisplay = 1,1,1,1,1,1，POPUP窗口的内容设定，可选值：[ containinswf, name, attributes, description, url, clickimageclose]，建议全部选上。
+
+播放mp3音乐。ImageVue支持播放mp3音乐，可以在你一边欣赏图片的同时一边听着动听的歌曲。在ImageVue的安装目录下建立mp3文件夹，放入mp3就可以了。修改congfig.ini的audiopath属性还可以在浏览不同的图片文件夹时听不同的歌曲。
+
+好了，基本上一个完美的flash相册程序就配置OK，下面是注意事项，一定要看：
+
+强烈建议admin文件夹更名，因为进入后台的方法实在太简单了，只要输入密码，而输入guest竟然可以登陆，而修改admin下的password.php  也不是最好的方法，因为知道目录结构的人很容易下载此文件，用记事本就可以察看密码。
+
+由于版权问题，就不提供下载了。如果需要的话去官方购买，或者google下，找破解版！

@@ -1,0 +1,29 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - grep
+  - Python
+  - 关于技术
+title: python简单模拟grep
+type: post
+---
+我的需求：把一个文件里包含特定字符串的行提取出来
+
+代码：
+<pre escaped="true">import re 
+def grep(file,exp): 
+    fd=open(file,'r') 
+    lines=fd.read().splitlines() 
+    fd.close()
+    logs=[] 
+    for line in lines: 
+        if re.search(exp,line): 
+            logs=logs.append(line) 
+    return logs</pre>
+这样是符合我需求了，大家可以按需扩展。

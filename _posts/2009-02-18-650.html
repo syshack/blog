@@ -1,0 +1,181 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - redhat
+  - 关于技术
+  - 安全
+  - 脚本
+title: 如何打造安全的linux服务器？
+type: post
+---
+今天去应聘的是linux系统管理员职位，人事这边基本没出啥问题，技术那问的时候出点小状况，居然忘了http内部错误500是什么玩意，迷糊！
+
+还好是内部的演习，搞完后，老师点评了下，知道一个真正的linux系统管理员需要具备怎么样的素质。看来又得好好的宅一阵子来学习了。
+
+先从自己最感兴趣的安全入手吧。虽然大家说linux系统比较安全，但是不注意，犯点小错误，也会造成相当大的安全问题。
+
+linux安全，我们需要从以下14方面来入手：
+
+关于分区
+
+一个潜在的黑客如果要攻击你的Linux服务器，他首先就会尝试缓冲区溢出。在过去的几年中，以缓冲区溢出为类型的安全漏洞是最为常见的一种形式了。
+
+更为严重的是，缓冲区溢出漏洞占了远程网络攻击的绝大多数，这种攻击可以轻易使得一个匿名的Internet用户有机会获得一台主机的部分或全部的控制权！
+
+为了防止此类攻击，我们从安装系统时就应该注意。如果用root分区纪录数据，如log文件和email，就可能因为拒绝服务产生大量日志或垃圾邮件，从而导致系统崩溃。所以建议为/var开辟单独的分区，用来存放日志和邮件，以避免root分区被溢出。最好为特殊的应用程序单独开一个分区，特别是可以产生大量日志的程序，还有建议为/home单独分一个区，这样他们就不能填满/分区了，从而就避免了部分针对Linux分区溢出的恶意攻击。
+
+关于BIOS
+
+记着要在BIOS设置中设定一个BIOS密码，不接收软盘启动。这样可以阻止不怀好意的人用专门的启动盘启动你的Linux系统，并避免别人更改BIOS设置，如更改软盘启动设置或不弹出密码框直接启动服务器等等。
+
+关于口令
+
+口令是系统中认证用户的主要手段，系统安装时默认的口令最小长度通常为5，但为保证口令不易被猜测攻击，可增加口令的最小长度，至少等于8。为此，需修改文件/etc/login.defs中参数PASS_MIN_LEN（口令最小长度）。同时应限制口令使用时间，保证定期更换口令，建议修改参数PASS_MIN_DAYS（口令使用时间）。
+
+关于Ping
+
+既然没有人能ping通你的机器并收到响应，你可以大大增强你的站点的安全性。你可以加下面的一行命令到/etc/rc.d/rc.local，以使每次启动后自动运行，这样就可以阻止你的系统响应任何从外部/内部来的ping请求。　　echo 1 &gt;/proc/sys/net/ipv4/icmp_echo_ignore_all
+
+关于Telnet
+
+如果你希望用户用Telnet远程登录到你的服务器时不要显示操作系统和版本信息（可以避免有针对性的漏洞攻击），你应该改写/etc/inetd.conf中的一行象下面这样：　　telnet stream tcp nowait root /usr/sbin/tcpd in.telnetd -h
+
+加-h标志在最后使得telnet后台不要显示系统信息，而仅仅显示login。
+
+关于特权账号
+
+禁止所有默认的被操作系统本身启动的且不需要的帐号，当你第一次装上系统时就应该做此检查，Linux提供了各种帐号，你可能不需要，如果你不需要这个帐号，就移走它，你有的帐号越多，就越容易受到攻击。
+
+<!--分页--> 在终端上打入下面的命令删掉下面的特权用账号：　　userdel adm
+
+userdel lp
+
+userdel sync
+
+userdel shutdown
+
+userdel halt
+
+userdel mail
+
+如果你不用sendmail服务器，就删除这几个帐号：　　userdel news
+
+userdel uucp
+
+userdel operator
+
+userdel games
+
+如果你不用X windows服务器，就删掉这个帐号。　　userdel gopher
+
+如果你不允许匿名FTP，就删掉这个用户帐号：　　userdel ftp
+
+关于su命令
+
+如果你不想任何人能够su为root的话,你应该编辑/etc/pam.d/su文件，加下面几行：　　auth sufficient /lib-
+
+/security/pam_rootok-
+
+.so debug
+
+auth required /lib-
+
+/security/pam_wheel-
+
+.so group=isd
+
+这意味着仅仅isd组的用户可以su作为root。如果你希望用户admin能su作为root.就运行下面的命令：　　usermod -G10 admin
+
+suid程序也是非常危险的，这些程序被普通用户以euid=0（即root）的身份执行，只能有少量程序被设置为suid。用这个命令列出系统的suid二进制程序：　　suneagle# find / -perm -4000 -print
+
+你可以用chmod -s去掉一些不需要程序的suid位。
+
+关于账户注销
+
+如果系统管理员在离开系统时忘了从root注销，系统应该能够自动从shell中注销。那么，你就需要设置一个特殊的 Linux变量“tmout”，用以设定时间。 同样，如果用户离开机器时忘记了注销账户，则可能给系统安全带来隐患。你可以修改/etc/profile文件，保证账户在一段时间没有操作后，自动从系统注销。 编辑文件/etc/profile，在“histfilesize=”行的下一行增加如下一行:　　tmout=600
+
+则所有用户将在10分钟无操作后自动注销。注意：修改了该参数后，必须退出并重新登录root，更改才能生效。
+
+关于系统文件
+
+对于系统中的某些关键性文件如passwd、passwd.old、passwd._、shadow、shadown._、inetd.conf、services和lilo.conf等可修改其属性，防止意外修改和被普通用户查看。 如将inetd文件属性改为600：　　# chmod 600 /etc/inetd.conf
+
+<!--分页--> 这样就保证文件的属主为root，然后还可以将其设置为不能改变:　　# chattr +i /etc/inetd.conf
+
+这样，对该文件的任何改变都将被禁止。 你可能要问：那我自己不是也不能修改了？当然，我们可以设置成只有root重新设置复位标志后才能进行修改:　　# chattr -i /etc/inetd.conf
+
+关于用户资源
+
+对你的系统上所有的用户设置资源限制可以防止DoS类型攻击，如最大进程数，内存数量等。例如，对所有用户的限制， 编辑/etc/security/limits.con加入以下几行：　　* hard core 0
+
+* hard rss 5000
+
+* hard nproc 20
+
+你也必须编辑/etc/pam.d/login文件，检查这一行的存在：　　session required /lib/security/pam_limits.so
+
+上面的命令禁止core files“core 0”，限制进程数为“nproc 50“，且限制内存使用为5M“rss 5000”。
+
+关于NFS服务器
+
+由于NFS服务器漏洞比较多，你一定要小心。如果要使用NFS网络文件系统服务，那么确保你的/etc/exports具有最严格的存取权限设置，不意味着不要使用任何通配符，不允许root写权限，mount成只读文件系统。你可以编辑文件/etc/exports并且加：
+
+/dir/to/export host1.mydomain.com(ro,root_squash)
+
+/dir/to/export host2.mydomain.com(ro,root_squash)
+
+其中/dir/to/export 是你想输出的目录，host.mydomain.com是登录这个目录的机器名，ro意味着mount成只读系统，root_squash禁止root写入该目录。最后为了让上面的改变生效，还要运行/usr/sbin/exportfs -a。
+
+关于开启的服务
+
+默认的linux就是一个强大的系统，运行了很多的服务。但有许多服务是不需要的，很容易引起安全风险。这个文件就是/etc/inetd.conf，它制定了/usr/sbin/inetd将要监听的服务，你可能只需要其中的两个：telnet和ftp，其它的类如shell, login, exec, talk, ntalk, imap, pop-2, pop-3, finger, auth, etc. 除非你真的想用它。否则统统关闭之。
+
+你先用下面的命令显示没有被注释掉的服务：　　grep -v "#" /etc/inetd.conf
+
+这个命令统计面前服务的总数：　　ps -eaf|wc -l
+
+需要提醒你的是以下三个服务漏洞很多，强烈建议你关闭它们：S34yppasswdd（NIS服务器）、S35ypserv（NIS服务器）和S60nfs（NFS服务器）。
+
+<!--分页--> 我们可以运行#killall -HUP inetd来关闭不需要的服务。当然，你也可以运行:　　#chattr +i /etc/inetd.conf
+
+如果你想使inetd.conf文件具有不可更改属性，而只有root 才能解开，敲以下命令:　　#chattr -i /etc/inetd.conf
+
+当你关闭一些服务以后，重新运行以上命令看看少了多少服务。运行的服务越少，系统自然越安全了。我们可以用下面命令察看哪些服务在运行：　　netstat -na --ip
+
+如果你用的是Redhat那就方便多了。^_^ Redhat提供一个工具来帮助你关闭服务，输入/usr/sbin/setup，然后选择"system services"，就可以定制系统启动时跑哪些服务。另外一个选择是chkconfig命令，很多linux版本的系统都自带这个工具。脚本名字中的数字是启动的顺序，以大写的K开头的是杀死进程用的。
+
+关于日志
+
+所有的日志都在/var/log下（仅对linux系统而言），默认情况下linux的日志就已经很强大了，但除ftp外。因此我们可以通过修改/etc/ftpaccess 或者/etc/inetd.conf，来保证每一个ftp连接日志都能够纪录下来。下面是一个修改inetd.conf的例子，假如有下一行：
+
+ftp stream tcp nowait root /usr/sbin/tcpd in.ftpd -l -L -i -o
+
+注释：
+
+-l每一个ftp连接都写到syslog；
+
+-L纪录用户的每一个命令；
+
+-i文件received,纪录到xferlog；
+
+-o文件transmitted,记录到xferlog。
+
+不过你也不要太相信日志，因为绝大部分黑客都有“擦脚印”的“好”习惯啰！如果你不放心，最好安装一个Sniffer吧。
+
+关于TCP_WRAPPERS
+
+默认的，Redhat Linux允许所有的请求，这是很危险的。如果用TCP_WRAPPERS来增强我们站点的安全性简直是举手之劳，你可以将禁止所有的请求放入“ALL: ALL”到/etc/hosts.deny中，然后放那些明确允许的请求到/etc/hosts.allow中，如:　　sshd: 192.168.1.10/255.255.255.0 gate.openarch.com
+
+对IP地址192.168.1.10和主机名gate.openarch.com，允许通过ssh连接。配置完了之后，用tcpdchk检查，你可以直接执行：tcpdchk 。在这里，tcpchk是TCP_Wrapper配置检查工具，它检查你的tcp wrapper配置并报告所有发现的潜在/存在的问题。
+
+关于补丁
+
+你应该经常到你所安装的Linux系统发行商的主页上去找最新的补丁。
+
+做完这些，你的linux系统就相对比较安全了。但是没有绝对的安全，更多的时候还是要求我们系统管理员有良好的安全意识和习惯，能够应对突发事件！

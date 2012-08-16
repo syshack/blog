@@ -1,0 +1,122 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+  - 函数
+  - 技术
+  - 插件
+title: wordpress中文工具箱的使用方法
+type: post
+---
+wordpress中文工具箱是由桑葚开发的，并借鉴了WordPress 随机文章和 WordPress 评论插件这两个插件的功能。它是一款功能非常强大，非常适合中国人使用习惯的插件。有了它，你可以在你博客上随心所欲的显示最新留言，随机文章，留言最多文章，发表评论最多的网友，以及没有乱码的中文文章摘要。 <strong></strong>
+
+<!--more-->
+
+<strong>一、下载与安装</strong>
+
+下载就不用说了，google一下就找的到
+
+1.先解压缩，把 mulberrykit.php 上传至 /wp-content/plugins/里
+
+2.进入 wordpress的管理后台，进入插件页面你就会看到列表里有中文wordpress中文工具箱一项，激活它。安装完毕。 安装完之后，并不是说你就拥有了中文wordpress工具箱的所有功能，因为它还没有工作。你需要在你所使用的主题里添加类似于&lt;?php xxx(); ?&gt;的函数。一般情况下，我们把它添加到主题的侧边栏里，你需要哪些就把相应的函数添加到合适的位置。只有这样，你才能看到效果，中文 wordpress工具箱才开始真正的工作。
+
+<strong>二、中文wordpress工具箱的功能以及对应函数</strong>
+
+下面你看到详细说明里的内容就在 mulberrykit.php 文件里，如果你查看起来麻烦，看着眼花，你可以先把对应函数复制下来，然后使用浏览器或者文本的查找功能，你会很快找到具体的位置。（下同）
+
+1、最新文章 对应函数：&lt;?php get_recent_posts(); ?&gt;
+
+详细说明： get_recent_posts($no_posts = 5, $before = ‘ + ‘, $after = ‘’, $show_pass_post = false, $skip_posts = 0)
+
+$no_posts：显示文章数，缺省为5条；
+
+$before：每条记录前显示的文字，缺省 &lt;li&gt;
+
+$after：每条记录后显示的文字，缺省 &lt;li&gt;
+
+$show_pass_post：是(true)/否(false)显示保护了的文章，缺省否(false)
+
+$skip_posts：跳过多少篇文章，缺省为0；
+
+2、最新留言 对应函数：&lt;?php get_recent_comments(); ?&gt;
+
+详细说明： get_recent_comments($no_comments = 5, $before = ‘ ‘, $after = ‘’, $show_pass_post = false)
+
+$no_comments：显示回响数，缺省为5条；
+
+$before：每条记录前显示的文字，缺省 &lt;li&gt;
+
+$after：每条记录后显示的文字，缺省&lt;li&gt;
+
+$show_pass_post：是(true)/否(false)显示保护了的文章，缺省否(false)
+
+如果希望在最新留言里不显示自己的回复。在get_recentcomments() 这个函数里找到这一句
+
+post_status = ‘publish’
+
+在后面 加上
+
+AND comment_author != ‘管理员的昵称’
+
+就可以了。（注意：引号是半角的）
+
+拓展函数： 仅显示留言，不包括引用的函数&lt;?php get_recent_comments_only (); ?&gt; 仅显示引用（但包括trackback和pingback）&lt;?php get_recent_trackbacks(); ?&gt;
+
+3、评论最多的文章
+
+对应函数：&lt;?php get_mostcommented(); ?&gt;
+
+详细说明   
+
+// Get Top Commented Posts get_mostcommented($limit = 5) 提示可以使用这个函数来实现热门文章的功能，即评论最多的文章。
+
+4、发表评论最多的朋友
+
+对应函数：&lt;?php get_commentmembersstats(); ?&gt;
+
+详细说明：
+
+get_commentmembersstats($threshhold = 5)
+
+把代码里面的blogmaster改成你自己的名字，可以滤掉你自己的名字。下面加粗的那一项。
+
+// Get Comments’ Members Stats // Treshhold = Number Of Posts User Must Have Before It Will Display His Name Out // 5 = Default Treshhold; -1 = Disable Treshhold function get_commentmembersstats($threshhold = 5) { global $wpdb, $tablecomments; $comments = $wpdb-&gt;get_results(”SELECT comment_author, comment_author_url, COUNT(comment_ID) AS ‘comment_total’ FROM $tablecomments WHERE comment_approved = ‘1′ AND (comment_author != ‘<strong>Sean</strong>’) AND (comment_author != ”)GROUP BY comment_author ORDER BY comment_total DESC”); $no = 1;
+
+5、随机文章
+
+对应函数： &lt;?php random_posts(); ?&gt;
+
+详细说明： random_posts ($limit = 5, $length = 400, $before = ‘ ’, $after = ‘’, $show_pass_post = false, $show_excerpt_in_title = true)
+
+$limit：显示文章数，缺省5篇；
+
+$length：摘要长度，缺省400；
+
+$before：每条记录前显示的文字，缺省 &lt;li&gt;
+
+$after：每条记录后显示的文字，缺省&lt;li&gt;
+
+$show_pass_post：是(true)/否(false)显示保护了的文章，缺省否(false)
+
+$show_excerpt_in_title：是(true)，摘要显示于文章链接的title；否(false)，直接显示于页面；缺省是(true)
+
+6、显示摘要 这一功能不需要在主题上调用函数，但需要模板文件支持！ 某些情况下需要输出摘要，比如搜索结果、档案，还有 rss 输出，这样可以节省流量资源。但是，如果你的文章是中文的话，官方 WordPress 输出的其实并不是摘要，它只是把文章里的 html 代码过滤掉了，但所有文字都还是原样输出了。 但需要注意的是，你的主题里面应该有archive.php这个模板文件，而且这个模板文件使用的是the_excerpt()来调用内容而不是the_content().如果没有archive.php这个模板文件的话,你可以自己建立一个。具体方法为：
+<ul>
+	<li>创建一个新文件：archive.php</li>
+	<li>把你主题里 index.php 中所有东西复制到 archive.php</li>
+	<li>保存 archive.php</li>
+	<li>在 archive.php 文件，把 the_content 改成 the_excerpt.</li>
+	<li>再次保存 archive.php 文件就可以了！</li>
+</ul>
+如果有archive.php模板文件的话，但是输出的是全文，你可以把the_content()替换为the_excerpt()就可以了！ 这样当你点击存档链接或者搜索文章时就会看到真正的中文摘要了，你的WordPress会更懂中文！
+
+                                                                                                              本文转载自互联网

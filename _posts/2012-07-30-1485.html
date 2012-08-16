@@ -1,0 +1,16 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - "sublime text2"
+  - 关于技术
+  - 工具
+title: "如何让sublime text2的build系统在win下支持中文路径"
+type: post
+---
+<p>Sublime text 2的build系统不支持中文路径，根据报错可以知道是因为中文编码的问题，win下的编码为（gbk），sublime text2默认为，可以通过如下方式解决：</p>  <p>打开sublime_plugin.py文件</p>  <p>添加以下内容：</p>  <p>reload(sys)   <br />sys.setdefaultencoding('gbk')</p>  <p>保存即可</p>

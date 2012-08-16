@@ -1,0 +1,18 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+published: true
+status: publish
+tags: 
+  - git
+  - Linux
+  - 关于技术
+title: "git 完全删除一个文件"
+type: post
+---
+一个不小心把一个敏感文件给提交到github去了，查了下谷歌，就有了下文，马克一下备忘。
+<pre class="brush:php">
+git filter-branch --index-filter 'git update-index --remove filename' HEAD
+rm filenamegit commit -a
+git push  --force</pre>

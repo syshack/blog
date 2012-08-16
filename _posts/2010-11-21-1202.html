@@ -1,0 +1,50 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _wp_old_slug: ""
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - ssh
+  - 关于技术
+title: 禁止用户交互的shell
+type: post
+---
+买了个vps，就挂了个博客站，感觉好浪费，发挥下开源精神，送了几个ssh帐号给ubuntu-cn的朋友穿墙英。今天登录服务器发现几个公用数据被删除了，虽然数据不是很重要，但是为了防止此类事情发生，给那些个用户写了个登录shell，登录之后只能更改密码，和做隧道用，不能交互。比较丑陋，呵呵，仅提供个思路，希望对大家有用。<!--more-->
+
+
+<pre class="brush:shell">
+#!/bin/bash
+id=`/usr/bin/id|awk -F'[()]'  '{print $2}'`
+if [ $id = syshacki -o $id = root ]
+        then
+        /bin/bash
+        else
+        echo "
+
+  ********************************************************************
+  *               Hey,kid!Welcome to SysHacker's Garden!             *
+  *                      E-mail:syshack#msn.com                      *
+  *                    Blog:http://www.syshacker.com                 *
+  *            You can press \"P\" to change your PassWord             *
+  *                      or Press \"q\" To Exit                        *
+  ********************************************************************
+
+"
+        while read -s -n1 -p 'Press "p" or "q" :' sad
+                echo ""
+                do
+                if [ syshack$sad == 'syshackp' ]
+                        then
+                        /usr/bin/passwd
+                else
+                        if [ syshack$sad == 'syshackq' ]
+                                then
+                                exit
+                        fi
+                fi
+        done
+fi</pre>

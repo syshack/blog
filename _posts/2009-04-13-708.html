@@ -1,0 +1,30 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - man
+  - pdf
+  - txt
+  - windows
+  - 关于技术
+title: 把linux的man手册转化为windows下可读的格式
+type: post
+---
+<blockquote>用习惯了windows，在学习linux的时候在那黑乎乎的界面下看man手册真的的很不习惯，但是把它转成txt或者pdf不是更好，下来请看如何实现此目的：</blockquote>
+如ls，最简单的办法是用重定向：
+man ls >ls.txt
+但是这样从Linux系统里传到windows里无法正常查看。
+可以用这种方法解决：
+man ls | col -b >ls.txt
+
+给出命令的格式：
+
+格式：man command_name | col -b >command_name.txt
+
+感觉不方便也可以制作成pdf电子书
+
+格式如下:man -t command_name | ps2pdf ->command_name.pdf

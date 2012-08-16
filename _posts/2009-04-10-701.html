@@ -1,0 +1,16 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - lamp
+  - Linux
+  - mysql
+  - 关于技术
+title: mysql出现诡异错误
+type: post
+---
+<p>今天想在装个在线考试系统，就临时在虚拟机里搭了个LAMP环境。</p>  <p>我是用源码编译的方式安装的httpd-2.2.11，php-5.2.9和mysql-5.1.32。</p>  <p>httpd，mysqld都正常启动。</p>  <p>我高兴的把那个ppframe代码mv到到网站目录/usr/local/apache2/htdoc/pp内。</p>  <p>访问 172.16.1.102/pp/ 正常访问，进入安装，但是令人气愤的事情来了，数据库连接失败</p>  <p>错误信息如下：</p>  <p>Connect Database Server Failed:Can't connect to local MySQL server through socket '/usr/local/mysql/tmp/mysql.sock' (2) Errno(2002)</p>  <p>进入虚拟机，用mysql –u root –p 可以正常连接，囧！可以建库，可以建表。</p>  <p>问了下google，得到的信息也没什么建设性的作用，他们说的可能的错误，我都检查了，没问题</p>  <p>郁闷ing！</p>  <p>明天有事，回来再研究，有熟悉mysql的朋友也帮忙分析分析！</p>

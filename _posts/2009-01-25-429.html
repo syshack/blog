@@ -1,0 +1,15 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - 关于技术
+  - 留言
+title: 实现留言Ctrl+Enter提交的办法
+type: post
+---
+<p>为了增强用户体验，给留言板加入快捷提交。</p>  <p>查了很多资料，发现两种解决方案，现在将最简单的给大家共享下</p>  <p>上代码：</p>  <li>document.getElementById(&quot;comment&quot;).onkeydown = function (moz_ev) </li>  <li>{ </li>  <li>var ev = null; </li>  <li>if (window.event){ </li>  <li>ev = window.event; </li>  <li>}else{ </li>  <li>ev = moz_ev; </li>  <li>} </li>  <li>if (ev != null &amp;&amp; ev.ctrlKey &amp;&amp; ev.keyCode == 13) </li>  <li>{ </li>  <li>document.getElementById(&quot;submit&quot;).click(); </li>  <li>} </li>  <li>}</li>  <p>将上边js代码插入到comment.php 就大功告成了哈。</p>  <p>对了，别忘了把按钮改下，让用户知道他可以这样提交哦！</p>

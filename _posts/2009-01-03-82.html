@@ -1,0 +1,62 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 关于技术
+  - 函数
+  - 友情链接
+  - 技术
+title: WordPress中友情链接的调用函数及其参数
+type: post
+---
+在sidebar.php中调用链接的默认语句是：
+
+&lt;ul class="linkcat"&gt;
+&lt;?php get_links('-1', '&lt;li&gt;', '&lt;/li&gt;', '&lt;br /&gt;', FALSE, 'id', FALSE, FALSE, -1, FALSE); ?&gt;
+&lt;/ul&gt;
+
+可见，调用链接的时候需要10个参数。从wordpress的文档中学到，调用链接的格式化语句是这样的：
+
+&lt;?php get_links(category, 'before', 'after',
+'between', show_images, 'order',
+show_description,show_rating, limit,
+show_updated, echo); ?&gt;
+
+按照默认值，每一个参数对应的含义为：
+
+<!--more-->
+<ul>
+	<li>显示所有链接</li>
+	<li>每一个链接项后换行</li>
+	<li>如果有图片，加入图片</li>
+	<li>图片和文本之间加入空格</li>
+	<li>按照链接名排序</li>
+	<li>显示链接的说明</li>
+	<li>不显示分级</li>
+	<li>除非有限制，显示所有链接</li>
+	<li>以链接而非文本形式显示链接</li>
+</ul>
+知道了这些就好办了，默认的第一个参数为“-1”即是显示所有连接，只要知道链接的分类id，就可以分类显示了。链接的分类id可以在 Wordpress 后台中的管理分类中查到。现在，就可以把原来sidebar.php中的调用函数改为：
+
+&lt;h3 class="sidebarsubtitle"&gt;好友&lt;/h3&gt;
+&lt;ul class="linkcat"&gt;
+&lt;?php get_links('4', '&lt;li&gt;', '&lt;/li&gt;', '&lt;br&gt;', FALSE, 'id', FALSE, FALSE, -1, FALSE); ?&gt;
+&lt;/ul&gt;
+&lt;h3 class="sidebarsubtitle"&gt;优秀bloggers&lt;/h3&gt;
+&lt;ul class="linkcat"&gt;
+&lt;?php get_links('5', '&lt;li&gt;', '&lt;/li&gt;', '&lt;br&gt;', FALSE, 'id', FALSE, FALSE, -1, FALSE); ?&gt;
+&lt;/ul&gt;
+
+其中的
+
+&lt;?php
+&lt;h3 class="sidebarsubtitle"&gt;好友&lt;/h3&gt;
+
+可以自己设置css样式。设置成自己喜欢的样子！

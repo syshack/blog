@@ -1,0 +1,65 @@
+--- 
+layout: post
+meta: {}
+published: true
+status: publish
+tags: 
+  - gem
+  - pupet
+  - ruby
+  - 关于技术
+title: "安装puppet“undefined method `gem' ”的解决办法"
+type: post
+---
+<p>我的rubygems是从github拉过来的，安装完pupet之后，执行报以下错：</p>  <pre class="csharpcode">[root@node1 ~]# puppet
+/usr/lib/ruby/site_ruby/1.8/rubygems.rb:604:<span class="kwrd">in</span> `load_yaml<span class="str">': undefined method `gem'</span> <span class="kwrd">for</span> Gem:Module (NoMethodError)
+        from /usr/lib/ruby/site_ruby/1.8/rubygems/requirement.rb:16
+        from /usr/lib/ruby/site_ruby/1.8/rubygems/specification.rb:39:<span class="kwrd">in</span> `require<span class="str">'
+        from /usr/lib/ruby/site_ruby/1.8/rubygems/specification.rb:39
+        from /usr/lib/ruby/site_ruby/1.8/rubygems.rb:1157:in `require'</span>
+        from /usr/lib/ruby/site_ruby/1.8/rubygems.rb:1157
+        from /usr/lib/ruby/site_ruby/1.8/puppet.rb:3:<span class="kwrd">in</span> `require<span class="str">'
+        from /usr/lib/ruby/site_ruby/1.8/puppet.rb:3
+        from /usr/lib/ruby/site_ruby/1.8/puppet/util.rb:220:in `require'</span>
+        from /usr/lib/ruby/site_ruby/1.8/puppet/util.rb:220:<span class="kwrd">in</span> `absolute_path?<span class="str">'
+        from /usr/lib/ruby/site_ruby/1.8/puppet/util.rb:190:in `which'</span>
+        from /usr/lib/ruby/site_ruby/1.8/puppet/util/command_line.rb:85:<span class="kwrd">in</span> `execute_external_subcommand<span class="str">'
+        from /usr/lib/ruby/site_ruby/1.8/puppet/util/command_line.rb:70:in `execute'</span>
+        from /usr/bin/puppet:4</pre>
+<style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: consolas, "Courier New", courier, monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }</style>
+
+<p>更新rubygems后正常。</p>
+
+<p>解决方法：执行 gem update –system</p>
+
+<p>是rubygems前个版本的一个bug 。更新完后解决。</p>
+
+<p>== 1.8.15 / 2012-01-06 </p>
+
+<p>* 1 bug fix: </p>
+
+<p>&#160; * Don't eager load yaml, it creates a bad loop. Fixes #256</p>

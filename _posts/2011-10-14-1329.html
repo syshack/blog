@@ -1,0 +1,26 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - bash
+  - 关于技术
+title: 获取执行脚本绝对路径的几个方法
+type: post
+---
+第一种
+<pre class="brush:php">
+file=${0##*/}if [ "${0%%/*}" = "$0" ];
+then
+echo $PWD"/"$file
+else
+path=`cd ${0%%/*};pwd`
+echo $path"/"$filefi</pre>
+第二种：
+获取脚本执行的pid
+然后：
+<pre class="brush:php">
+ls -l /proc/$pid/exe|awk -F"&gt; " '{print $2}'</pre>

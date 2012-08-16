@@ -1,0 +1,37 @@
+--- 
+layout: post
+meta: {}
+published: true
+status: publish
+tags: 
+  - RTX
+  - Ubuntu
+  - wine
+  - 中文乱码
+  - 关于技术
+title: "Wine RTX中文乱码解决方法"
+type: post
+---
+到了新公司，必须使用RTX，我又用的是Linux系统，所以只有用wine来安装RTX。
+我的系统是Ubuntu 11.10，安装完后，出现中文方块，分析是因为字体问题，Linux下没有win下的字体导致的，查了不少网页都没解决，就自己动手，去查看注册表有关字体的项，逐项的去看去改，最后解决了。
+下面就是整个解决过程：<!--more-->1、从windows下拷贝simsun字体到.wine/driver_c/windows/Fonts下
+2、然后导入下面这个注册表文件，复制以下内容到zh.reg,然后在终端输入 regedit zh.reg
+<pre class="brush:php">
+REGEDIT4
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\Fonts]
+"Simsun"="simsun.ttc"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontLink]
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontLink\SystemLink]
+"Lucida Sans Unicode"="simsun.ttc,simsun"
+"Microsoft Sans Serif"="simsun.ttc,simsun"
+"SimSun"="simsun.ttc,simsun"
+"Tahoma"="simsun.ttc,simsun"
+
+[HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\FontSubstitutes]
+"MS Shell Dlg"="Simsun"
+"MS Shell Dlg 2"="Simsun"
+"Tahoma"="Simsun"
+</pre>
+使用其他字体也是如此，这三个地方的的注册表必须有。

@@ -1,0 +1,20 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - lvs
+  - 关于技术
+title: ipvsadm编译错误解决方法
+type: post
+---
+最近进了个linux群，话说气氛还挺好的，一个哥们在做linux群集的时候，说安装ipvsadm的时候编译老是错误。以前用RPM包装就没问题，我就尝试在自己的机器上编译安装个，编译的时候也是错误，所以就去Google了很久，才找出个解决方案，不敢独享，给大家贴出来：
+很简单  就是做个软链接
+<pre>[root@xsean ipvsadm-1.24]# ln -s /usr/src/kernels/2.6.9-22.EL-i686/ /usr/src/linux
+</pre>
+问题就解决了，具体是什么原理 我也不知道，留言给章博士了 等他回复 呵呵~
+再次感谢章博士对开源事业做出的贡献。

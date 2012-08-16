@@ -1,0 +1,19 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - Python
+  - 关于技术
+title: python调用系统命令
+type: post
+---
+按照需要选适合自己的方法：
+1、os.system('commond') 无法获取返回码和返回值
+2、os.popen('command'+'arg').read()|readlines() 获取返回值，read返回字符串形式，readlines返回list形式.
+3、commands.getstatusoutput('command')获取返回码和返回值列，表形式
+4、commands.getoutput('command')获取返回值，字符串形式

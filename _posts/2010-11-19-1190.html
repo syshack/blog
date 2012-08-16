@@ -1,0 +1,118 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - 关于生活
+title: RPM打包记
+type: post
+---
+说起为啥要打包，是有段故事，这里就不讲了，就讲下过程吧。
+
+以前没打包过，突然有需求了，问了下谷哥，谷哥送我到了<a title="rpm打包与分发" href="http://www.ibm.com/developerworks/cn/linux/l-rpm1/index.html" >这里</a>，挺详细的，按惯例（俺自己的），先顺着教程来一遍。<!--more-->
+建立相关的目录
+<pre class="brush:shell">
+$ cd ~
+$ mkdir mywget
+$ cd mywget
+$ mkdir BUILD RPMS SOURCES SPECS SRPMS
+$ cd SOURCES
+$ wget ftp://ftp.gnu.org/gnu/wget/wget-1.12.tar.gz
+$ cd ..
+</pre>
+编辑spec文件
+<pre class="brush:shell">
+$ touch SPECS/wget.spec</pre>
+内容
+<pre class="brush:shell">
+# This is a sample spec file for wget
+
+%define _topdir         /root/mywget
+%define name                    wget
+%define release         1
+%define version         1.12
+%define buildroot %{_topdir}/%{name}-%{version}-root
+
+BuildRoot:      %{buildroot}
+Summary:                GNU wget
+License:                GPL
+Name:                   %{name}
+Version:                %{version}
+Release:                %{release}
+Source:                 %{name}-%{version}.tar.gz
+Prefix:                 /usr
+Group:                  Development/Tools
+
+%description
+The GNU wget program downloads files from the Internet using the command-line.
+
+%prep
+%setup -q
+
+%build
+./configure --prefix=$RPM_BUILD_ROOT/usr
+make
+
+%install
+make install
+
+%files
+%defattr(-,root,root)
+/usr/bin/wget
+
+%doc %attr(0444,root,root) /usr/share/man/man1/wget.1.gz
+   /usr/etc/wgetrc
+   /usr/share/info/dir
+   /usr/share/info/wget.info.gz
+   /usr/share/locale/be/LC_MESSAGES/wget.mo
+   /usr/share/locale/bg/LC_MESSAGES/wget.mo
+   /usr/share/locale/ca/LC_MESSAGES/wget.mo
+   /usr/share/locale/cs/LC_MESSAGES/wget.mo
+   /usr/share/locale/da/LC_MESSAGES/wget.mo
+   /usr/share/locale/de/LC_MESSAGES/wget.mo
+   /usr/share/locale/el/LC_MESSAGES/wget.mo
+   /usr/share/locale/en@boldquot/LC_MESSAGES/wget.mo
+   /usr/share/locale/en@quot/LC_MESSAGES/wget.mo
+   /usr/share/locale/en_GB/LC_MESSAGES/wget.mo
+   /usr/share/locale/en_US/LC_MESSAGES/wget.mo
+   /usr/share/locale/eo/LC_MESSAGES/wget.mo
+   /usr/share/locale/es/LC_MESSAGES/wget.mo
+   /usr/share/locale/et/LC_MESSAGES/wget.mo
+   /usr/share/locale/eu/LC_MESSAGES/wget.mo
+   /usr/share/locale/fi/LC_MESSAGES/wget.mo
+   /usr/share/locale/fr/LC_MESSAGES/wget.mo
+   /usr/share/locale/ga/LC_MESSAGES/wget.mo
+   /usr/share/locale/gl/LC_MESSAGES/wget.mo
+   /usr/share/locale/he/LC_MESSAGES/wget.mo
+   /usr/share/locale/hr/LC_MESSAGES/wget.mo
+   /usr/share/locale/hu/LC_MESSAGES/wget.mo
+   /usr/share/locale/id/LC_MESSAGES/wget.mo
+   /usr/share/locale/it/LC_MESSAGES/wget.mo
+   /usr/share/locale/ja/LC_MESSAGES/wget.mo
+   /usr/share/locale/lt/LC_MESSAGES/wget.mo
+   /usr/share/locale/nb/LC_MESSAGES/wget.mo
+   /usr/share/locale/nl/LC_MESSAGES/wget.mo
+   /usr/share/locale/pl/LC_MESSAGES/wget.mo
+   /usr/share/locale/pt/LC_MESSAGES/wget.mo
+   /usr/share/locale/pt_BR/LC_MESSAGES/wget.mo
+   /usr/share/locale/ro/LC_MESSAGES/wget.mo
+   /usr/share/locale/ru/LC_MESSAGES/wget.mo
+   /usr/share/locale/sk/LC_MESSAGES/wget.mo
+   /usr/share/locale/sl/LC_MESSAGES/wget.mo
+   /usr/share/locale/sr/LC_MESSAGES/wget.mo
+   /usr/share/locale/sv/LC_MESSAGES/wget.mo
+   /usr/share/locale/tr/LC_MESSAGES/wget.mo
+   /usr/share/locale/uk/LC_MESSAGES/wget.mo
+   /usr/share/locale/vi/LC_MESSAGES/wget.mo
+   /usr/share/locale/zh_CN/LC_MESSAGES/wget.mo
+   /usr/share/locale/zh_TW/LC_MESSAGES/wget.mo</pre>
+<span style="color: #ff0000;">注意：file后边的行，最后那一堆是教程没有，没有的话打包要报错。</span>
+修改完执行
+
+<pre class="brush:shell">
+$ rpmbuild -v -bb --clean SPECS/wget.spec</pre>
+就会在RPMS目录下产生rpm包。要注意的就是红字部分了，spec是重点了，先写到这，再去看看官方文档去～

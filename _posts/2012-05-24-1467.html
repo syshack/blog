@@ -1,0 +1,14 @@
+--- 
+layout: post
+meta: 
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - svn
+  - 关于技术
+title: SVN代码回滚
+type: post
+---
+<p>不知道什么时候干了个错事儿，把错误的代码给提交上去了，由于提交的时候的commit是乱写的，故而很悲剧。写个文章mark下，提醒我<strong>下次commit记得认真写</strong>。记录下回滚的过程吧：</p>  <p>1、svn info filename 看看文件的最新版本号</p>  <p>2、先svn log filename下，看看日志，筛选下日期</p>  <p>3、svn diff –r a:b filename 查看代码改动</p>  <p>4、找出需要回滚的版本号</p>  <p>5、svn merg –r n（当前版本）: o（需要回滚版本）&#160; filename</p>

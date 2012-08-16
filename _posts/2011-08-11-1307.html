@@ -1,0 +1,64 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  _sinaweibo_sync: "true"
+  _sinaweibo_sync_id: "3.3452429445202E+15"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - 关于技术
+  - 有关互联网
+title: Squid+Openvpn实现站点WallBreak
+type: post
+---
+<p>VPS买了一年多了多，上边搭了Openvpn服务，也没太用，安装客户端太麻烦，最近同事想WallBreak，我就想了下，想到可以用网关去拨VPN，然后其他人就可以WallBreak了。方案：用内网的一个闲置的linux做一个代理服务器，代理服务器去拨Openvpn，然后内网直接设置代理就OK了，具体的拓扑下图所示</p>
+<p><a href="http://www.syshacker.com/wp-content/uploads/2011/08/翻墙.png"><img src="http://www.syshacker.com/wp-content/uploads/2011/08/翻墙.png" alt="" title="翻墙" width="808" height="423" class="aligncenter size-full wp-image-1308" /></a></p><!--more-->
+<p>具体操作：</p>
+<p>一、安装代理服务器</p>
+<p>代理服务器Linux首选Squid呗，不解释；</p>
+<pre class="brush:php">
+yum install squid</pre>
+<p>安装完成后</p>
+<pre class="brush:php">
+squid -z初始化</pre>
+<p>这一步可能会报错，说什么 visible-hostname未设置，解决办法：</p>
+<pre class="brush:php">
+编辑/etc/squid/squid.conf,
+添加一行 visible-hostname syshacker.com，
+然后执行 squid -z就不会有错了</pre>
+<p>然后进一步配置下Squid，网上一抓一大把，我就不写了，其他都可以不用设置，ACL必须要设置下，不然客户端都无法使用。详情请参阅</p>
+<p><a href="http://home.arcor.de/pangj/squid/" title="Squid权威指南" target="_blank">Squid权威指南</a><br />
+然后执行：</p>
+<pre class="brush:php">
+service squid start</pre>
+<p>Squid就搞定了。然后关键来了，OpenVPN拨入</p>
+二、OpenVPN拨入
+1，编译安装OpenVPN，和编译其他软件一样，这里也不赘述。注意一点编译过程可能会报 comp-lzo缺失的错误，按提示去那个网址下载comp-lzo并编译安装，然后在编译安装OpenVPN就OK了；
+2，下载服务器证书和生成客户端配置文件
+下载服务器证书到/etc/openvpn目录
+编辑客户端配置文件，下边是一个基础的范例
+<pre class="brush:php">
+client
+max-routes 1000 #定义支持最多的路由条目
+dev tun #这项和服务器保持一致
+proto tcp #这项和服务器保持一致
+remote #服务器ip 服务器port 
+persist-key
+persist-tun
+resolv-retry infinite #解析服务器域名
+ca ca.crt #服务器证书
+comp-lzo #使用lzo压缩，与服务端一致
+auth-nocache #不缓存认证信息
+auth-user-pass #使用用户名密码验证方式
+verb 3 #日志记录级别
+route 1.12.0.0 255.252.0.0 net_gateway 5 #定义路由 net_gateway表示你本地网关，你可以为墙内和墙外定义不同的路由，墙内走本地网关，墙外走VPN，可以节省服务器流量，访问国内网站相对较快，至于国内的地址列表，GoogleCode上有个项目，可以下载列表</pre>
+3，使用openvpn拨入即可 
+三、客户端只要在浏览器上设置好代理服务器地址和端口就OK了，享受自由的互联网吧，就这么简单。
+<blockquote>遇到的问题问题：
+故障现象：VPN明明显示已经建立连接了，除了VPN server，其他网络都无法访问；
+原因：真实网卡设置了默认网关，导致vpn拨入初始化过程无法设置路由信息。
+解决方法：去掉真实网卡的默认网关，重新拨就好了；</blockquote>
+
+

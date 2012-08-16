@@ -1,0 +1,30 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+published: false
+status: draft
+tags: 
+  - 关于生活
+title: ""
+type: post
+---
+<pre class="brush:python">
+#!/usr/bin/env python
+import os, sys
+import zlib
+import base64
+filename = sys.argv[1]
+def crc(fileName):
+  fd = open(fileName,"rb")
+  content = fd.readlines()
+  fd.close()
+  prev = None
+  for eachLine in content:
+    if not prev:
+      prev = zlib.crc32(eachLine)
+    else:
+      prev = zlib.crc32(eachLine, prev)
+  return prev
+for eachFile in sys.argv[1:]:
+  print base64.b64encode(str(crc(eachFile)))</pre>

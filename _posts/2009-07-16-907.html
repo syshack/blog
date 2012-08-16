@@ -1,0 +1,23 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "3"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - 0day
+  - Firefox
+  - 关于技术
+title: "Firefox3.5 0day临时解决方案"
+type: post
+---
+一直在使用火狐，也一直关注它的发展，近期也把它升级到了最新版本3.5。3.5的速度比以前快躲了，但ms安全问题却不如前版本了。继前段时间被曝光发现几十个漏洞之后，今天上网有看到网络上出现0day攻击。用户在使用ff3.5访问包含恶意代码的网站时，很容易就会执行恶意代码，造成木马攻击或流氓软件强行植入等问题。
+
+使用ff3.5的同学们注意了，在ff发布安全补丁之前，你可以使用以下方法对火狐做下配置，保证安全。
+
+在浏览器地址栏中键入about:config。然后它会跳出一个警告说这样会影响质保，点击保证小心。然后在顶部的配置编辑的过滤框中键入jit。
+
+双击javascript.options.jit.content那行控制线。让它变成false。好了，这个世界清静了，我们可以继续用我们的火狐子了。
+
+估计火狐隔段时间就该放补丁了，到时候大家再按照上述步骤把javascript.options.jit.content改回true即可。

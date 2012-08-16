@@ -1,0 +1,15 @@
+--- 
+layout: post
+meta: 
+  _encloseme: "1"
+  _pingme: "1"
+published: true
+status: publish
+tags: 
+  - Python
+  - 关于技术
+  - 字典合并
+title: python合并字典
+type: post
+---
+<p>python合并字典，key相同的value相加，重载update方法的解法，还没想好怎么写，写好补上吧。</p>  <p>#!/usr/bin/env python    <br />#-*-coding:utf-8-*-     <br />a={&quot;a&quot;:1,&quot;b&quot;:2,&quot;d&quot;:1}     <br />b={&quot;a&quot;:2,&quot;b&quot;:3,&quot;e&quot;:2}     <br />#解法一     <br />c=a     <br />for k in b:     <br />&#160;&#160;&#160;&#160; c[k] = c.get(k, 0) + b[k]     <br />print c</p>

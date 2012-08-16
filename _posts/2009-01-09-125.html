@@ -1,0 +1,207 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - wordpress
+  - 主题
+  - 关于技术
+title: 使用水平菜单下拉菜单显示分类
+type: post
+---
+Translate by <a href="http://127.0.0.1">Sean</a>
+我的一位读者最近问我如何创建我的横向菜单栏：简短的回答是混合CSS和JavaScript 。
+
+第一步是让WordPress的显示菜单上的等级列表没有标题。
+<code><!--p wp_list_categories<br-->('sort_column=name&amp;sort_order=asc
+&amp;style=list
+&amp;children=true
+&amp;hierarchical=true
+&amp;title_li=0'); ?&gt; </code>
+<!--more-->
+然后，我们总结这个WordPress的代码如下，让我们可以设置样式。
+我补充说，这我header.php ，但你可以将其添加任何你想它出现的地方。
+<code>
+
+<div style="text-align:center;">
+<ul id="menu" style="padding:0; margin:0;"><!--p wp_list_categories<br-->('sort_column=name
+&amp;sort_order=asc
+&amp;style=list
+&amp;children=true
+&amp;hierarchical=true
+&amp;title_li=0'); ?&gt;</ul>
+</div></code>
+这个CSS是相当简单，你只需要添加到您的主题的style.css文件就可以了。
+<code>ul#menu {
+margin: 0;
+padding: 0;
+list-style: none;
+width: 100%;
+font-size:1.2em;
+}
+
+ul#menu li {
+float: left;
+padding: 0;
+margin: 0;
+border-right:solid 1px #fff;
+}
+
+ul#menu ul li {
+float: none;
+position: relative;
+border-bottom: 1px solid #7EAED7;
+/* fixes gap problem in IE */
+border-left: 1px solid #FFF;
+z-index:1000;
+}
+
+ul#menu li ul {
+margin: 0;
+padding: 0;
+display:none;
+list-style: none;
+position: absolute;
+background: #9CC;
+}
+ul#menu ul ul{
+margin-left: .2em;
+position: absolute;
+top: 0;
+left: 100%;
+}
+
+ul#menu * a:hover, ul#menu li a:active{
+background:#7EAED7 !important;
+color: #FFFFFF;
+}
+
+ul#menu li a:link,
+ul#menu li a:visited,
+ul#menu li a:hover,
+ul#menu li a:active{
+display: block;
+padding: .2em .3em;
+text-decoration: none;
+background: #5587B3;
+color: #FFFFFF;
+}
+
+ul#menu ul li a:link,
+ul#menu ul li a:visited,
+ul#menu ul li a:hover,
+ul#menu ul li a:active {
+width: 8em;
+}</code>
+当然您将需要改变颜色和文字大小成为你喜欢的样子。
+
+现在，最后一步是，使其作为一个下拉列表中所有的浏览器。这可以在Firefox中
+以一个简单的CSS宣言，但Internet Explorer不理解：悬停伪类，所以我们用js模仿这个工具。
+
+<code><script type="text/javascript"><!--
+ /*<! [CDATA[*/
+
+var mbA,mbT,mbTf,mbSf;
+var mbR = [];
+
+function mbSet(m) {
+if (document.getElementById&&document.createElement) {
+	var m=document.getElementById(m);
+	mbR[mbR.length] = m;
+	var i;
+
+	e=m.getElementsByTagName('a');
+	if (!mbTf) mbTf=new Function('mbHT();');
+	if (!mbSf) mbSf=new Function('mbS(this);');
+	for (i=0;i<e.length;i++) {
+		e[i].onmouseout=e[i].onblur=mbTf;
+		e[i].onmouseover=e[i].onfocus=mbSf;
+	}
+
+	m=m.getElementsByTagName('ul');
+	for (i=0;i<m.length;i++) {
+		mbH(mbL(m[i]));
+	}
+}}
+
+function mbHA() {
+	if (mbA) {
+		while (mbA) mbH(mbA);
+		mbHE('block');
+	}
+}
+
+function mbHT() {
+	if (!mbT) mbT=setTimeout('mbHA();', 0);
+}
+
+function mbTC() {
+	if (mbT) {
+		clearTimeout(mbT);
+		mbT=null;
+	}
+}
+
+function mbS(m) {
+	mbTC();
+	if (mbA) while (mbA&&m!=mbA&&mbP(m)!=mbA) mbH(mbA);
+	else mbHE('none');
+
+	if (mbM(m)) {
+		mbSH(m,'block');
+		mbA=m;
+	}
+}
+
+function mbH(m) {
+	if (m==mbA) mbA=mbP(m);
+	mbSH(m,'none');
+	mbT=null;
+}
+
+function mbL(m) {
+	while (m && m.tagName != 'A') m = m.previousSibling;
+	return m;
+}
+
+function mbM(l) {
+	while (l && l.tagName != 'UL') l = l.nextSibling;
+	return l;
+}
+
+function mbP(m) {
+	var p = m.parentNode.parentNode;
+	if (p.tagName == 'UL') {
+		var i = 0;
+		while (i <mbR.length) {
+			if (mbR[i] == p) return null;
+			i++;
+		}
+	} else {
+		return null;
+	}
+	return mbL(p);
+}
+
+function mbSH(m,v) {
+	m.className=v;
+	mbM(m).style.display=v;
+}
+
+function mbHE(v) {
+	mbHEV(v,document.getElementsByTagName('select'));
+}
+
+function mbHEV(v,e) {
+	for (var i=0;i<e.length;i++) e[i].style.display=v;
+}
+/*
+*/ //  &gt;
+// --></script></code>
+
+要激活它，更改主题的标记以

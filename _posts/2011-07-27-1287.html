@@ -1,0 +1,35 @@
+--- 
+layout: post
+meta: 
+  _edit_last: "1"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - Linux
+  - 关于技术
+title: "【updated】Cannot allocate memory处理方法"
+type: post
+---
+<p>像往常一样，早上来第一件事，拨VPN，拨了半天总是出错，ssh连server居然也连不上，报Cannot allocate memory错误，Google之，说是</p>
+<blockquote><p>有些程序整个服务器的物理内存当作目前服务器拥有的内存了，而不是VPS 的内存，因此，当它试图使用大于VPS 限制的大小的内存时，就报这个错误了。</p>
+</blockquote>
+<p>简单粗暴的上ContrlPannel重启之，正常了。没时间折腾，先mark之，等有空再看如何解决～</p>
+<p>解决了，是有个用户不自觉，开了几百个ssh进程，导致服务器内存不足。兄弟对不住，那会免费开给你wallbreak用，你非要这样搞破坏，对不住了，帐户我删了～</p>
+<p>后来想想这也不是办法，也有可能用户是无意的呢，咳，还是我限制不够，删除用户治标不治本，下来上治本的，限制用户资源占用：<br />
+首先在/etc/pam.d/login里添加一行</p>
+<pre class="brush:php">
+session required /lib/security/pam_limits.so</pre>
+<p>然后编辑
+<pre class="brush:php">
+/etc/security/limits.conf</pre>
+<p>1、限制用户的内存使用</p >
+<pre class="brush:php" >
+ * - rss 100000 除root之外的用户，内存使用限制在100M</pre>
+<p>2、限制用户的进程数<br />
+ * hard nproc 20   除root之外的用户，最多开20进程我的<br />
+PS:apache以www用户运行，所以对其限制放宽</p>
+<pre class="brush:php">
+ www - nproc 100
+ www - rss 500000</pre>
+<p>先这样设置下，观察阵子，本文持续更新。</p>

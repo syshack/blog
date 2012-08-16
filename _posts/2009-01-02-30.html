@@ -1,0 +1,114 @@
+--- 
+layout: post
+meta: 
+  IM_contentdowned: "1"
+  _edit_last: "3"
+  lightboxoff: "false"
+  views: "1"
+published: true
+status: publish
+tags: 
+  - mysql
+  - Python
+  - 关于技术
+  - 函数
+  - 新特性
+  - 脚本
+title: Python中Random函数的用法
+type: post
+---
+Python中random函数的用法
+
+随机整数：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; random.randint(0,99)
+
+21
+
+ 
+
+随机选取0到100间的偶数：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; random.randrange(0, 101, 2)
+
+42
+
+ 
+
+随机浮点数：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; random.random() 
+
+0.85415370477785668
+
+&gt;&gt;&gt; random.uniform(1, 10)
+
+5.4221167969800881
+
+ 
+
+随机字符：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; random.choice('abcdefg&amp;#%^*f')
+
+'d'
+
+ 
+
+多个字符中选取特定数量的字符：
+
+&gt;&gt;&gt; import random
+
+random.sample('abcdefghij',3) 
+
+['a', 'd', 'b']
+
+ 
+
+多个字符中选取特定数量的字符组成新字符串：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; import string
+
+&gt;&gt;&gt; string.join(random.sample(['a','b','c','d','e','f','g','h','i','j'], 3)).r
+
+eplace(" ","")
+
+'fih'
+
+ 
+
+随机选取字符串：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; random.choice ( ['apple', 'pear', 'peach', 'orange', 'lemon'] )
+
+'lemon'
+
+ 
+
+洗牌：
+
+&gt;&gt;&gt; import random
+
+&gt;&gt;&gt; items = [1, 2, 3, 4, 5, 6]
+
+&gt;&gt;&gt; random.shuffle(items)
+
+&gt;&gt;&gt; items
+
+[3, 2, 5, 6, 4, 1]
+
+ 
+
+random的函数还有很多，大家可以参考Python手册！
